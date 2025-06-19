@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Приглашение на свадьбу</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Allura&family=Dancing+Script:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+
+
+
+    
+    <!-- Навигация -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="nav-title">Приглашение</div>
+            <div class="nav-menu" id="nav-menu">
+                <a href="#home" class="nav-link">Главная</a>
+                <a href="#countdown" class="nav-link">Отсчет</a>
+                <a href="#menu" class="nav-link">Меню</a>
+                <a href="#survey" class="nav-link">Анкета</a>
+                <a href="#schedule" class="nav-link">Расписание</a>
+                <a href="#location" class="nav-link">Место</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Главная страница -->
+    <section class="hero-section" id="home">
+
+        
+        <div class="hero-content">
+            <!-- Заголовок с декоративными элементами -->
+            <div class="title-section">
+                <div class="decorative-line"></div>
+                <h1 class="main-title">Дорогие<br>Гости!</h1>
+                <div class="decorative-line"></div>
+            </div>
+            
+            <!-- Приветственный блок -->
+            <div class="welcome-section">
+                <div class="welcome-text">
+                    <p class="elegant-text">Мы рады сообщить Вам, что</p>
+                    <div class="date-highlight">03.10.2025</div>
+                    <p class="elegant-text">состоится самое важное торжество в нашей жизни</p>
+                </div>
+            </div>
+            
+            <!-- Основная информация с иконками -->
+            <div class="info-card">
+                <div class="info-content">
+                    <div class="event-icon">💍</div>
+                    <h2 class="event-title">День нашей свадьбы!</h2>
+                    <p>Приглашаем Вас разделить с нами радость этого незабываемого дня.</p>
+                    <div class="event-details">
+                        <div class="detail-item">
+                            <span class="detail-icon">📅</span>
+                            <span class="detail-text">03 октября 2025</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">🕒</span>
+                            <span class="detail-text">15:00</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">📍</span>
+                            <span class="detail-text">Торжественная церемония</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Фото пары с оверлеем -->
+            <div class="couple-main-photo">
+                <div class="photo-frame">
+                    <img src="https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Фото пары">
+                    <div class="photo-overlay">
+                        <div class="photo-text">Кирилл & Анастасия</div>
+                        <div class="photo-date">03.10.2025</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Цитата о любви с автором -->
+            <div class="love-quote">
+                <div class="quote-container">
+                    <div class="quote-mark">"</div>
+                    <p class="quote-text">Любовь — это когда два сердца<br>бьются в унисон навечно</p>
+                    <div class="quote-mark">"</div>
+                </div>
+                <div class="quote-author">— Древняя мудрость</div>
+            </div>
+            
+            <!-- История любви -->
+            <div class="love-story">
+                <h3 class="story-title">💕 Наша история</h3>
+                <div class="story-timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-icon">❤️</div>
+                        <div class="timeline-content">
+                            <h4>Первая встреча</h4>
+                            <p class="timeline-date">20.01.2022</p>
+                            <p>Когда наши пути пересеклись впервые</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">💖</div>
+                        <div class="timeline-content">
+                            <h4>Предложение</h4>
+                            <p class="timeline-date">13.12.2024</p>
+                            <p>Момент, когда мы решили быть вместе навсегда</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">👑</div>
+                        <div class="timeline-content">
+                            <h4>Свадьба</h4>
+                            <p class="timeline-date">03.10.2025</p>
+                            <p>Начало нашей новой жизни вместе</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Карточки молодоженов -->
+            <div class="couple-info">
+                <div class="person-card groom">
+                    <div class="person-photo">
+                                                    <img src="Жених.jpg" alt="Жених">
+                        <div class="person-overlay">
+                            <div class="person-role">🤵 Жених</div>
+                        </div>
+                    </div>
+                    <h3 class="person-name">Кирилл</h3>
+                    <p class="person-description">Любящий, заботливый, с прекрасным чувством юмора</p>
+                </div>
+                
+                <div class="heart-separator">
+                    <div class="heart">💖</div>
+                    <div class="plus">+</div>
+                </div>
+                
+                <div class="person-card bride">
+                    <div class="person-photo">
+                                                 <img src="невеста1.jpg" alt="Невеста">
+                        <div class="person-overlay">
+                            <div class="person-role">👰 Невеста</div>
+                        </div>
+                    </div>
+                    <h3 class="person-name">Анастасия</h3>
+                    <p class="person-description">Нежная, умная, с добрым сердцем</p>
+                </div>
+            </div>
+            
+            <!-- Свадебная команда -->
+            <div class="wedding-team">
+                <div class="title-section">
+                    <div class="decorative-line"></div>
+                    <h3 class="team-title">👥 Наша свадебная команда 👥</h3>
+                    <div class="decorative-line"></div>
+                </div>
+                
+                <p class="team-description">Люди, которые помогают нам в этот особенный день</p>
+                
+                <div class="team-members">
+                    <div class="team-card witness-male">
+                        <div class="team-photo">
+                            <img src="свидетель.jpg" alt="Свидетель">
+                            <div class="team-overlay">
+                                <div class="team-role">🤵 Свидетель</div>
+                            </div>
+                        </div>
+                        <h4 class="team-name">Павел Беляков</h4>
+                        <p class="team-description-text">Надежный друг жениха, который всегда поддержит в важный момент</p>
+                        <div class="team-duties">
+                            <div class="duty-item">
+                                <span class="duty-icon">💍</span>
+                                <span>Хранитель колец</span>
+                            </div>
+                            <div class="duty-item">
+                                <span class="duty-icon">📝</span>
+                                <span>Помощник в оформлении</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="team-separator">
+                        <div class="separator-icon">🤝</div>
+                    </div>
+                    
+                    <div class="team-card witness-female">
+                        <div class="team-photo">
+                            <img src="свителеьница2.jpg" alt="Свидетельница">
+                            <div class="team-overlay">
+                                <div class="team-role">👰 Свидетельница</div>
+                            </div>
+                        </div>
+                        <h4 class="team-name">Елена Причепа</h4>
+                        <p class="team-description-text">Лучшая подруга невесты, которая всегда рядом в радости и печали</p>
+                        <div class="team-duties">
+                            <div class="duty-item">
+                                <span class="duty-icon">💐</span>
+                                <span>Помощница невесты</span>
+                            </div>
+                            <div class="duty-item">
+                                <span class="duty-icon">📸</span>
+                                <span>Организатор фотосессий</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-note">
+                    <div class="note-icon">💝</div>
+                    <p>Павел и Елена - наши верные друзья, которые помогают сделать этот день незабываемым!</p>
+                </div>
+            </div>
+            
+            <!-- Важная информация в карточках -->
+            <div class="important-info">
+                <h3 class="info-grid-title">Что нас ждет</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-icon">💒</div>
+                        <h4>Церемония</h4>
+                        <p>Торжественная роспись</p>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">🥂</div>
+                        <h4>Фуршет</h4>
+                        <p>Вкусные угощения</p>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">💃</div>
+                        <h4>Танцы</h4>
+                        <p>Музыка и веселье</p>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">📸</div>
+                        <h4>Фотосессия</h4>
+                        <p>Память на всю жизнь</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Призыв к действию -->
+            <div class="call-to-action">
+                <div class="cta-content">
+                    <h3>🎉 Будьте с нами в этот особенный день!</h3>
+                    <p>Ваше присутствие сделает наш праздник еще более незабываемым</p>
+                    <div class="cta-button">
+                        <a href="#survey" class="btn-primary">Подтвердить присутствие</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Обратный отсчет -->
+    <section class="countdown-section" id="countdown">
+        <div class="decorative-elements">
+            <div class="gold-circle gold-1"></div>
+            <div class="gold-circle gold-2"></div>
+            <div class="gold-circle gold-3"></div>
+        </div>
+        
+        <div class="countdown-content">
+            <h2 class="countdown-title">До нашего торжества осталось:</h2>
+            <div class="countdown-container">
+                <div class="countdown-item">
+                    <span class="countdown-number" id="days">00</span>
+                    <span class="countdown-label">ДНЕЙ</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="hours">00</span>
+                    <span class="countdown-label">ЧАСОВ</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="minutes">00</span>
+                    <span class="countdown-label">МИНУТ</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="seconds">00</span>
+                    <span class="countdown-label">СЕКУНД</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Меню и пожелания -->
+    <section class="menu-section" id="menu">
+
+        
+        <div class="section-content">
+            <h2 class="section-title">МЕНЮ</h2>
+            <div class="menu-text">
+                <p>Меню разнообразное, поэтому сообщите нам заранее, если у вас есть какие-либо предпочтения или диетические ограничения.</p>
+                <p>После подтверждения вы сможете прочесть опрос о двух вкусовых предпочтениях и напитках.</p>
+            </div>
+            
+            <h2 class="section-title">ПОЖЕЛАНИЯ ПО ПОДАРКАМ</h2>
+            <div class="gifts-text">
+                <p>Ваше присутствие в день нашей свадьбы - самый значимый подарок для нас!</p>
+                <p>Мы понимаем, что дарить цветы на свадьбу - это традиция, но мы не сможем насладиться их красотой в полной мере...</p>
+                <p>Будем рады любой другой альтернативе (вино или в денежном эквиваленте).</p>
+            </div>
+            
+            <h2 class="section-title">ПРИМЕЧАНИЕ</h2>
+            <div class="note-text">
+                <p>Будем благодарны, если вы воздержитесь от крика "Горько!" на празднике, ведь поцелуй — это наш личный момент близости.</p>
+                                    <p>Пожалуйста подтвердите свое присутствие до 29.08.2025</p>
+            </div>
+            
+            <h2 class="section-title">ФОТО</h2>
+            
+            <!-- Telegram chat section -->
+            <div class="telegram-section">
+                <div class="telegram-card">
+                    <div class="telegram-icon">📱</div>
+                    <h3>Telegram-беседа для фотографий</h3>
+                    <p>Мы создаём специальную беседу в Telegram, где все гости смогут делиться фотографиями, сделанными в день нашей свадьбы!</p>
+                    <div class="telegram-features">
+                        <div class="feature-item">
+                            <span class="feature-icon">📸</span>
+                            <span>Делитесь моментами в реальном времени</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">💬</span>
+                            <span>Общайтесь с другими гостями</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">❤️</span>
+                            <span>Сохраните все воспоминания в одном месте</span>
+                        </div>
+                    </div>
+                    <div class="telegram-contact">
+                        <p><strong>За ссылкой-приглашением обращайтесь к:</strong></p>
+                        <div class="contact-info">
+                            <span class="contact-icon">@</span>
+                            <a href="https://t.me/lykian_off2" target="_blank" class="telegram-link">lykian_off2</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="section-title fancy">Ждем Вас!</h2>
+            <div class="final-note">
+                <p>Будем благодарны, если при выборе нарядов на наше торжество вы придерживались следующей палитры</p>
+            </div>
+            
+            <div class="color-palette">
+                <div class="color-circle" style="background: #E1A6AD;"></div>
+                <div class="color-circle" style="background: #FFDAB9;"></div>
+                <div class="color-circle" style="background: #F4B752;"></div>
+                <div class="color-circle" style="background: #A0D6B4;"></div>
+                <div class="color-circle" style="background: #DEF7FE;"></div>
+                <div class="color-circle" style="background: #7FC7FF;"></div>
+                <div class="color-circle" style="background: #E7ECFF;"></div>
+                <div class="color-circle" style="background: #6495ED;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Анкета для гостей -->
+    <section class="survey-section" id="survey">
+        <div class="survey-container">
+            <div class="survey-header">
+                <p>Пожалуйста, ответьте на вопросы, которые для вас подготовили <strong>Жених</strong> и <strong>Невеста</strong>:</p>
+            </div>
+            
+            <form class="survey-form" id="surveyForm">
+                <div class="question-block">
+                    <h3>Ваше имя и фамилия</h3>
+                    <input type="text" name="fullname" class="text-input" placeholder="Введите ваше имя и фамилию" required>
+                </div>
+                
+                <div class="question-block">
+                    <h3>Нужен ли вам трансфер?</h3>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="transfer" value="Нет" required>
+                            <span class="radio-custom"></span>
+                            Нет
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="transfer" value="Только до торжества" required>
+                            <span class="radio-custom"></span>
+                            Только до торжества
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="transfer" value="Только после торжества" required>
+                            <span class="radio-custom"></span>
+                            Только после торжества
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="transfer" value="До и после торжества" required>
+                            <span class="radio-custom"></span>
+                            До и после торжества
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <h3>Есть ли у вас особые предпочтения по еде</h3>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="food" value="нет" required>
+                            <span class="radio-custom"></span>
+                            нет
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="food" value="не ем мясо" required>
+                            <span class="radio-custom"></span>
+                            не ем мясо
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="food" value="не ем рыбу" required>
+                            <span class="radio-custom"></span>
+                            не ем рыбу
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="food" value="вегетарианец" required>
+                            <span class="radio-custom"></span>
+                            вегетарианец
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <h3>Какой алкоголь вы предпочитаете?</h3>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="alcohol" value="Красное вино" required>
+                            <span class="radio-custom"></span>
+                            Красное вино
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="alcohol" value="Белое вино" required>
+                            <span class="radio-custom"></span>
+                            Белое вино
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="alcohol" value="Шампанское" required>
+                            <span class="radio-custom"></span>
+                            Шампанское
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="alcohol" value="Виски/коньяк" required>
+                            <span class="radio-custom"></span>
+                            Виски/коньяк
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="alcohol" value="Водка" required>
+                            <span class="radio-custom"></span>
+                            Водка
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="alcohol" value="Не буду пить алкоголь" required>
+                            <span class="radio-custom"></span>
+                            Не буду пить алкоголь
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <h3>Будет ли с вами на празднике ребенок?</h3>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="child" value="Да" required>
+                            <span class="radio-custom"></span>
+                            Да
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="child" value="Нет" required>
+                            <span class="radio-custom"></span>
+                            Нет
+                        </label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    <span class="btn-text">Отправить ответы</span>
+                    <span class="btn-loading" style="display: none;">Отправка...</span>
+                </button>
+                
+                <button type="button" class="view-responses-btn" onclick="viewAllResponses()">
+                    Посмотреть все ответы (для организаторов)
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Расписание -->
+    <section class="schedule-section" id="schedule">
+        <div class="decorative-elements">
+            <div class="gold-circle gold-1"></div>
+            <div class="gold-circle gold-2"></div>
+            <div class="gold-circle gold-3"></div>
+            <div class="gold-circle gold-4"></div>
+            <div class="gold-circle gold-5"></div>
+            <div class="gold-circle gold-6"></div>
+            
+            <!-- Floating elements for schedule -->
+            <div class="floating-heart heart-1">💕</div>
+            <div class="floating-heart heart-2">💖</div>
+            <div class="floating-heart heart-3">❤️</div>
+            
+            <div class="sparkle sparkle-1">✨</div>
+            <div class="sparkle sparkle-2">⭐</div>
+            <div class="sparkle sparkle-3">✨</div>
+        </div>
+        
+        <div class="schedule-content">
+            <!-- Enhanced title section -->
+            <div class="title-section">
+                <div class="decorative-line"></div>
+                <h2 class="fancy-title">💍 Свадебное расписание 💍</h2>
+                <div class="decorative-line"></div>
+            </div>
+            
+            <div class="schedule-subtitle">
+                <p>Присоединяйтесь к нашему особенному дню!</p>
+            </div>
+            
+            <div class="schedule-items">
+                <!-- Ceremony -->
+                <div class="schedule-item ceremony">
+                    <div class="schedule-icon">💒</div>
+                    <div class="schedule-time">
+                        <div class="time">15:00</div>
+                        <div class="date">03.10.2025</div>
+                    </div>
+                    <div class="schedule-info">
+                        <h3>Торжественная роспись</h3>
+                        <h4>📍 ЗАГС Смоленска</h4>
+                        <div class="restaurant-address">
+                            <span class="address-icon">📍</span>
+                            <span>ул. Глинки, 4 (кабинет 3), Смоленск</span>
+                        </div>
+                        <p>Приглашаем вас разделить вместе с нами радость создания новой семьи.</p>
+                        <div class="schedule-details">
+                            <div class="detail-item">
+                                <span class="detail-icon">👰</span>
+                                <span>Официальная церемония</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">📝</span>
+                                <span>Подписание документов</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">📸</span>
+                                <span>Фотосессия с гостями</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Transfer -->
+                <div class="schedule-item transfer">
+                    <div class="schedule-icon">🚐</div>
+                    <div class="schedule-time">
+                        <div class="time">16:30</div>
+                        <div class="date">03.10.2025</div>
+                    </div>
+                    <div class="schedule-info">
+                        <h3>Трансфер</h3>
+                        <h4>🚌 Микроавтобусы</h4>
+                        <p>После росписи вас доставят до ресторана 2 микроавтобуса.</p>
+                        <div class="schedule-details">
+                            <div class="detail-item">
+                                <span class="detail-icon">🚐</span>
+                                <span>Комфортабельный транспорт</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">🎵</span>
+                                <span>Музыка в дороге</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Reception -->
+                <div class="schedule-item reception">
+                    <div class="schedule-icon">🥂</div>
+                    <div class="schedule-time">
+                        <div class="time">17:00</div>
+                        <div class="date">03.10.2025</div>
+                    </div>
+                    <div class="schedule-info">
+                        <h3>Торжественный ужин</h3>
+                        <h4>🍽️ Ресторан Эдем</h4>
+                        <div class="restaurant-address">
+                            <span class="address-icon">📍</span>
+                            <span>2-я Дачная ул., 12, Смоленск</span>
+                        </div>
+                        <p>Именно здесь мы отметим наш незабываемый день в уютной и праздничной атмосфере.</p>
+                        
+                        <div class="restaurant-features">
+                            <h5>🎊 Что вас ждет в ресторане Эдем:</h5>
+                            <div class="features-grid">
+                                <div class="feature-item">
+                                    <span class="feature-icon">🍽️</span>
+                                    <span>Изысканная кухня</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon">🥂</span>
+                                    <span>Коллекция вин</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon">🎵</span>
+                                    <span>Живая музыка</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon">💃</span>
+                                    <span>Танцевальная зона</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon">🌸</span>
+                                    <span>Элегантный декор</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon">🎁</span>
+                                    <span>Особенные сюрпризы</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="schedule-details">
+                            <div class="detail-item">
+                                <span class="detail-icon">🍾</span>
+                                <span>Торжественный фуршет</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">🎂</span>
+                                <span>Свадебный торт</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">🎉</span>
+                                <span>Развлекательная программа</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Evening -->
+                <div class="schedule-item evening">
+                    <div class="schedule-icon">🌙</div>
+                    <div class="schedule-time">
+                        <div class="time">20:00</div>
+                        <div class="date">03.10.2025</div>
+                    </div>
+                    <div class="schedule-info">
+                        <h3>Вечерняя программа</h3>
+                        <h4>🎊 Танцы и веселье</h4>
+                        <p>Продолжение празднования с танцами до утра!</p>
+                        <div class="schedule-details">
+                            <div class="detail-item">
+                                <span class="detail-icon">🎤</span>
+                                <span>Песни и тосты</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">💃</span>
+                                <span>Танцевальная музыка</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">🎆</span>
+                                <span>Особенные моменты</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Important note -->
+            <div class="schedule-note">
+                <div class="note-icon">⚠️</div>
+                <div class="note-content">
+                    <h4>Важно помнить:</h4>
+                    <ul>
+                        <li>Пожалуйста, прибывайте за 15 минут до начала</li>
+                        <li>Трансфер до ресторана организован</li>
+                        <li>Дресс-код: нарядная одежда</li>
+                        <li>Подтвердите своё присутствие в анкете</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Карта -->
+    <section class="location-section" id="location">
+        <div class="decorative-elements">
+            <div class="gold-circle gold-1"></div>
+            <div class="gold-circle gold-2"></div>
+        </div>
+        
+        <div class="location-content">
+            <div id="map" class="map-container"></div>
+            <button class="map-btn">Настроить карту</button>
+        </div>
+    </section>
+
+
+
+    <script src="script.js"></script>
+</body>
+</html> 
