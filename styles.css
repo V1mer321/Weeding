@@ -1814,6 +1814,70 @@ section {
 
 /* Адаптивность */
 @media (max-width: 768px) {
+    /* Отключаем тяжелые эффекты для лучшей производительности */
+    * {
+        animation-duration: 0.3s !important;
+        transition-duration: 0.2s !important;
+    }
+    
+    /* Упрощаем backdrop-filter для мобильных */
+    .main-nav,
+    .info-card,
+    .telegram-card,
+    .survey-form,
+    .cta-content,
+    .success-message {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+    
+    /* Уменьшаем тени для лучшей производительности */
+    .info-card,
+    .telegram-card,
+    .photo-frame,
+    .survey-form,
+    .team-card,
+    .timeline-item,
+    .person-card,
+    .info-item,
+    .cta-content {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+    }
+    
+    /* Отключаем анимации pulse, bounce, heartbeat */
+    .date-highlight,
+    .event-icon,
+    .telegram-icon,
+    .timeline-icon,
+    .heart,
+    .countdown-item {
+        animation: none !important;
+    }
+    
+    /* Упрощаем hover эффекты */
+    .photo-frame:hover,
+    .team-card:hover,
+    .timeline-item:hover,
+    .person-card:hover,
+    .info-item:hover {
+        transform: none !important;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+    }
+    
+    /* Отключаем параллакс эффекты */
+    .gold-circle {
+        position: static !important;
+        transform: none !important;
+    }
+    
+    /* Скрываем декоративные элементы */
+    .side-ornament,
+    .side-decorations,
+    .menu-ornament,
+    .menu-decorations {
+        display: none !important;
+    }
+    
     /* Адаптируем анимации для планшетов */
     .side-animation {
         width: 120px;
@@ -1899,8 +1963,6 @@ section {
         text-align: center;
     }
     
-
-    
     .google-form-container {
         padding: 15px;
     }
@@ -1937,6 +1999,19 @@ section {
 }
 
 @media (max-width: 480px) {
+    /* Максимальная оптимизация для телефонов */
+    * {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+    }
+    
+    /* Полностью отключаем все эффекты */
+    *:hover {
+        transform: none !important;
+        box-shadow: none !important;
+    }
+    
     /* Скрываем анимации на мобильных */
     .side-animation {
         display: none;
@@ -1945,6 +2020,27 @@ section {
     /* Полностью скрываем боковые декорации на мобильных */
     .side-decorations {
         display: none;
+    }
+    
+    /* Отключаем все тяжелые эффекты */
+    .main-nav,
+    .info-card,
+    .telegram-card,
+    .survey-form,
+    .team-card,
+    .timeline-item,
+    .person-card,
+    .info-item,
+    .cta-content,
+    .success-message {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    /* Ускоряем прокрутку */
+    html {
+        scroll-behavior: auto !important;
     }
     
     .main-title {

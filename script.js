@@ -79,16 +79,23 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Анимация появления элементов при прокрутке
+    // Анимация появления элементов при прокрутке (оптимизировано для мобильных)
     const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
+        threshold: window.innerWidth <= 768 ? 0.05 : 0.1,
+        rootMargin: window.innerWidth <= 768 ? '0px 0px -20px 0px' : '0px 0px -50px 0px'
     };
     
     const observer = new IntersectionObserver(function(entries) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('animate-in');
+                // Добавляем задержку только на больших экранах
+                if (window.innerWidth > 768) {
+                    setTimeout(() => {
+                        entry.target.classList.add('animate-in');
+                    }, 100);
+                } else {
+                    entry.target.classList.add('animate-in');
+                }
             }
         });
     }, observerOptions);
@@ -183,10 +190,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     initMap();
     
-    // Эффект параллакса для декоративных элементов
+    // Эффект параллакса только для десктопа (отключен для мобильных)
     let ticking = false;
     
     function updateParallax() {
+        // Отключаем параллакс на мобильных устройствах для производительности
+        if (window.innerWidth <= 768) {
+            return;
+        }
+        
         const scrolled = window.pageYOffset;
         const parallaxElements = document.querySelectorAll('.gold-circle');
         const speed = 0.3;
@@ -200,21 +212,26 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function requestTick() {
-        if (!ticking) {
+        if (!ticking && window.innerWidth > 768) {
             requestAnimationFrame(updateParallax);
             ticking = true;
         }
     }
     
-    window.addEventListener('scroll', requestTick);
+    // Параллакс только на больших экранах
+    if (window.innerWidth > 768) {
+        window.addEventListener('scroll', requestTick);
+    }
     
-    // Добавляем CSS анимации динамически
+    // Добавляем CSS анимации динамически (оптимизированные для мобильных)
     const style = document.createElement('style');
+    const isMobile = window.innerWidth <= 768;
+    
     style.textContent = `
         section {
             opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.8s ease-out;
+            transform: translateY(${isMobile ? '20px' : '50px'});
+            transition: all ${isMobile ? '0.3s' : '0.8s'} ease-out;
         }
         
         section.animate-in {
@@ -224,15 +241,21 @@ document.addEventListener('DOMContentLoaded', function() {
         
         .radio-label {
             transform: translateX(0);
-            transition: transform 0.3s ease;
+            transition: transform ${isMobile ? '0.1s' : '0.3s'} ease;
         }
         
         .radio-label:hover {
-            transform: translateX(10px);
+            transform: translateX(${isMobile ? '5px' : '10px'});
         }
         
         .gold-circle {
-            transition: transform 0.1s ease-out;
+            transition: ${isMobile ? 'none' : 'transform 0.1s ease-out'};
+        }
+        
+        @media (max-width: 768px) {
+            * {
+                will-change: auto !important;
+            }
         }
         
         .hamburger.active span:nth-child(1) {
