@@ -7,21 +7,36 @@ const SHEET_NAME = 'Лист1'; // или название вашего лист
 
 function doPost(e) {
   try {
+    // Отладочная информация
+    console.log('doPost вызван с параметрами:', e);
+    console.log('e.postData:', e.postData);
+    console.log('e.parameter:', e.parameter);
+    
     let data;
     
-    // Проверяем тип данных (JSON или FormData)
-    if (e.postData.type === 'application/json') {
+    // Проверяем наличие postData
+    if (e.postData && e.postData.type === 'application/json') {
       data = JSON.parse(e.postData.contents);
-    } else {
-      // FormData
+      console.log('Используем JSON данные:', data);
+    } else if (e.parameter) {
+      // FormData через параметры
       data = {
-        name: e.parameter.name,
-        text: e.parameter.text
+        name: e.parameter.name || '',
+        text: e.parameter.text || ''
       };
+      console.log('Используем FormData параметры:', data);
+    } else {
+      throw new Error('Нет данных для обработки');
+    }
+    
+    // Проверяем обязательные поля
+    if (!data.name || !data.text) {
+      throw new Error('Отсутствуют обязательные поля: name или text');
     }
     
     // Добавляем пожелание в таблицу
     const result = addWish(data);
+    console.log('Пожелание добавлено:', result);
     
     return ContentService
       .createTextOutput(JSON.stringify({
@@ -32,6 +47,7 @@ function doPost(e) {
       .setMimeType(ContentService.MimeType.JSON);
       
   } catch (error) {
+    console.error('Ошибка в doPost:', error);
     return ContentService
       .createTextOutput(JSON.stringify({
         success: false,
