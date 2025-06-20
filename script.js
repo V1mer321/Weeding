@@ -899,8 +899,14 @@ async function sendWishByEmail(wishData) {
 function loadWishesFromStorage() {
     try {
         const stored = localStorage.getItem('weddingWishes');
+        console.log('🔍 Данные из localStorage:', stored);
         wishesData = stored ? JSON.parse(stored) : [];
-        console.log(`📚 Загружено ${wishesData.length} пожеланий`);
+        console.log(`📚 Загружено ${wishesData.length} пожеланий из localStorage`);
+        
+        // Выводим первые несколько пожеланий для отладки
+        if (wishesData.length > 0) {
+            console.log('📝 Первые пожелания:', wishesData.slice(0, 3));
+        }
     } catch (error) {
         console.error('❌ Ошибка загрузки пожеланий:', error);
         wishesData = [];
@@ -912,25 +918,38 @@ function displayWishes() {
     const wishesList = document.getElementById('wishesList');
     const loadMoreBtn = document.getElementById('loadMoreWishes');
     
-    if (!wishesList) return;
+    console.log('🔍 displayWishes вызвана, wishesData:', wishesData);
+    console.log('📊 Количество пожеланий:', wishesData.length);
+    
+    if (!wishesList) {
+        console.error('❌ Элемент wishesList не найден');
+        return;
+    }
     
     // Скрыть пример, если есть реальные пожелания
     const exampleWish = wishesList.querySelector('.example-wish');
     if (wishesData.length > 0 && exampleWish) {
         exampleWish.style.display = 'none';
+        console.log('👁️ Пример пожелания скрыт');
+    } else if (wishesData.length === 0 && exampleWish) {
+        exampleWish.style.display = 'block';
+        console.log('👁️ Пример пожелания показан');
     }
     
     // Очистить существующие пожелания (кроме примера)
     const existingWishes = wishesList.querySelectorAll('.wish-item:not(.example-wish)');
     existingWishes.forEach(wish => wish.remove());
+    console.log('🧹 Очищено существующих пожеланий:', existingWishes.length);
     
     // Показать пожелания
     const wishesToShow = wishesData.slice(0, displayedWishesCount + wishesPerLoad);
+    console.log('📝 Пожелания к показу:', wishesToShow.length);
     
     wishesToShow.forEach((wish, index) => {
         if (index >= displayedWishesCount) {
             const wishElement = createWishElement(wish);
             wishesList.appendChild(wishElement);
+            console.log('➕ Добавлено пожелание:', wish.name);
         }
     });
     
@@ -948,6 +967,7 @@ function displayWishes() {
     
     // Обновить счетчик
     updateWishesCount();
+    console.log('✅ displayWishes завершена, отображено:', displayedWishesCount);
 }
 
 // Создание элемента пожелания
@@ -1937,3 +1957,55 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 console.log('🎭 Персонализированные аватары инициализированы!');
+
+// Административные функции для отладки (только для разработки)
+function debugWishes() {
+    console.log('🔧 ОТЛАДКА ПОЖЕЛАНИЙ:');
+    console.log('📊 wishesData:', wishesData);
+    console.log('📊 localStorage:', localStorage.getItem('weddingWishes'));
+    console.log('📊 displayedWishesCount:', displayedWishesCount);
+    console.log('📊 wishesPerLoad:', wishesPerLoad);
+    
+    const wishesList = document.getElementById('wishesList');
+    console.log('📊 wishesList element:', wishesList);
+    
+    if (wishesList) {
+        const allWishes = wishesList.querySelectorAll('.wish-item');
+        const realWishes = wishesList.querySelectorAll('.wish-item:not(.example-wish)');
+        console.log('📊 Всего элементов пожеланий на странице:', allWishes.length);
+        console.log('📊 Реальных пожеланий на странице:', realWishes.length);
+    }
+}
+
+// Добавить тестовое пожелание
+function addTestWish() {
+    const testWish = {
+        name: 'Тестер',
+        text: 'Это тестовое пожелание для проверки работы системы!',
+        timestamp: new Date().toISOString(),
+        id: generateWishId()
+    };
+    
+    wishesData.unshift(testWish);
+    localStorage.setItem('weddingWishes', JSON.stringify(wishesData));
+    
+    console.log('✅ Тестовое пожелание добавлено:', testWish);
+    
+    // Обновить отображение
+    displayWishes();
+    updateWishesStats();
+}
+
+// Очистить все пожелания (для отладки)
+function clearWishesDebug() {
+    wishesData = [];
+    localStorage.removeItem('weddingWishes');
+    displayWishes();
+    updateWishesStats();
+    console.log('🗑️ Все пожелания очищены (отладка)');
+}
+
+// Добавляем функции в глобальную область для доступа из консоли
+window.debugWishes = debugWishes;
+window.addTestWish = addTestWish;
+window.clearWishesDebug = clearWishesDebug;
