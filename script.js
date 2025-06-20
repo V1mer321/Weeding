@@ -1520,3 +1520,416 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('✅ Сайт инициализирован');
 });
+
+// Персонализированные аватары - интерактивные функции
+let avatarDialogueIndex = 0;
+let avatarStoryIndex = 0;
+let isDialogueActive = false;
+
+// Диалоги для персонажей
+const avatarDialogues = [
+    {
+        groom: "Привет! 👋 Я Кирилл, и я очень рад, что ты заглянул на наш сайт!",
+        bride: "Привет! 💕 Я Анастасия! Мы так счастливы поделиться с вами нашей радостью!"
+    },
+    {
+        groom: "Знаешь, когда я впервые увидел Настю, сразу понял - это она! 😍",
+        bride: "А я думала, что он просто милый сосед... Как же я ошибалась! 😊"
+    },
+    {
+        groom: "Теперь мы готовимся к самому важному дню в нашей жизни! 💍",
+        bride: "И мы хотим, чтобы ты был рядом с нами в этот особенный день! 👰"
+    },
+    {
+        groom: "Обещаю, будет весело! Мы подготовили много сюрпризов! 🎉",
+        bride: "Да, и не забудь заполнить анкету - нам важно знать твои предпочтения! 📝"
+    }
+];
+
+// История любви для аватаров
+const weddingStorySteps = [
+    {
+        groom: "Все началось с обычного 'Привет' в социальной сети... 📱",
+        bride: "Кто бы мог подумать, что простое сообщение изменит всю мою жизнь! 💫"
+    },
+    {
+        groom: "Наша первая встреча была в кафе... Я так волновался! ☕",
+        bride: "А я три часа выбирала, что надеть! В итоге опоздала на 15 минут 😅"
+    },
+    {
+        groom: "Помню наше первое 'Я тебя люблю'... Это было волшебно! ✨",
+        bride: "Ты сказал это во время просмотра фильма, а я заплакала от счастья! 😭💕"
+    },
+    {
+        groom: "А предложение руки и сердца... Я готовился целый месяц! 💍",
+        bride: "И я сразу сказала 'ДА!', даже не дослушав до конца! 😂👰"
+    },
+    {
+        groom: "Теперь мы готовимся стать семьей... Это лучшее приключение! 👫",
+        bride: "И мы хотим, чтобы наши друзья были свидетелями нашего счастья! 💝"
+    }
+];
+
+// Интересные факты
+const funFactsData = [
+    {
+        icon: "🎮",
+        text: "<strong>Кирилл:</strong> Может играть в игры по 12 часов подряд, но всегда находит время для Насти"
+    },
+    {
+        icon: "🍰",
+        text: "<strong>Настя:</strong> Печет самые вкусные торты в мире (Кирилл может подтвердить!)"
+    },
+    {
+        icon: "😴",
+        text: "<strong>Вместе:</strong> Рекордсмены по сну до 14:00 в выходные дни"
+    },
+    {
+        icon: "🎬",
+        text: "<strong>Любим:</strong> Смотреть фильмы с попкорном до 3 утра"
+    },
+    {
+        icon: "🍕",
+        text: "<strong>Кирилл:</strong> Знает все пиццерии города наизусть"
+    },
+    {
+        icon: "📚",
+        text: "<strong>Настя:</strong> Читает по 2-3 книги в месяц, Кирилл слушает пересказы"
+    },
+    {
+        icon: "🚗",
+        text: "<strong>Вместе:</strong> Можем заблудиться даже с навигатором"
+    },
+    {
+        icon: "☕",
+        text: "<strong>Утром:</strong> Настя - чай, Кирилл - кофе. Компромиссов нет! 😄"
+    }
+];
+
+// Функция начала диалога
+function startAvatarDialogue() {
+    if (isDialogueActive) {
+        stopAvatarDialogue();
+        return;
+    }
+    
+    isDialogueActive = true;
+    avatarDialogueIndex = 0;
+    
+    const button = document.querySelector('.avatar-controls .avatar-btn');
+    button.textContent = '⏸️ Остановить диалог';
+    
+    // Скрываем интересные факты
+    hideFunFacts();
+    
+    // Начинаем диалог
+    playDialogue();
+}
+
+// Функция проигрывания диалога
+function playDialogue() {
+    if (!isDialogueActive || avatarDialogueIndex >= avatarDialogues.length) {
+        stopAvatarDialogue();
+        return;
+    }
+    
+    const currentDialogue = avatarDialogues[avatarDialogueIndex];
+    const groomBubble = document.getElementById('groomBubble');
+    const brideBubble = document.getElementById('brideBubble');
+    
+    // Показываем реплику жениха
+    showSpeechBubble(groomBubble, currentDialogue.groom);
+    
+    setTimeout(() => {
+        // Скрываем реплику жениха и показываем невесты
+        hideSpeechBubble(groomBubble);
+        showSpeechBubble(brideBubble, currentDialogue.bride);
+        
+        setTimeout(() => {
+            // Скрываем реплику невесты
+            hideSpeechBubble(brideBubble);
+            avatarDialogueIndex++;
+            
+            // Переходим к следующей реплике через паузу
+            setTimeout(() => {
+                if (isDialogueActive) {
+                    playDialogue();
+                }
+            }, 1000);
+        }, 3000);
+    }, 3000);
+}
+
+// Функция остановки диалога
+function stopAvatarDialogue() {
+    isDialogueActive = false;
+    avatarDialogueIndex = 0;
+    
+    const button = document.querySelector('.avatar-controls .avatar-btn');
+    button.textContent = '💬 Начать диалог';
+    
+    // Скрываем все пузыри
+    const groomBubble = document.getElementById('groomBubble');
+    const brideBubble = document.getElementById('brideBubble');
+    hideSpeechBubble(groomBubble);
+    hideSpeechBubble(brideBubble);
+}
+
+// Функция показа пузыря речи
+function showSpeechBubble(bubble, text) {
+    if (!bubble) return;
+    
+    const textElement = bubble.querySelector('.bubble-text');
+    if (textElement) {
+        textElement.textContent = text;
+    }
+    bubble.classList.add('show');
+}
+
+// Функция скрытия пузыря речи
+function hideSpeechBubble(bubble) {
+    if (!bubble) return;
+    bubble.classList.remove('show');
+}
+
+// Функция показа интересных фактов
+function showFunFacts() {
+    const funFactsElement = document.getElementById('funFacts');
+    if (!funFactsElement) return;
+    
+    // Останавливаем диалог если он активен
+    if (isDialogueActive) {
+        stopAvatarDialogue();
+    }
+    
+    // Генерируем случайные факты
+    const shuffledFacts = [...funFactsData].sort(() => Math.random() - 0.5).slice(0, 4);
+    
+    // Обновляем содержимое
+    const factsGrid = funFactsElement.querySelector('.facts-grid');
+    if (factsGrid) {
+        factsGrid.innerHTML = shuffledFacts.map(fact => `
+            <div class="fact-item">
+                <span class="fact-icon">${fact.icon}</span>
+                <p>${fact.text}</p>
+            </div>
+        `).join('');
+    }
+    
+    // Показываем факты
+    funFactsElement.style.display = 'block';
+    
+    // Прокручиваем к фактам
+    funFactsElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// Функция скрытия интересных фактов
+function hideFunFacts() {
+    const funFactsElement = document.getElementById('funFacts');
+    if (funFactsElement) {
+        funFactsElement.style.display = 'none';
+    }
+}
+
+// Функция проигрывания истории любви
+function playWeddingStory() {
+    if (isDialogueActive) {
+        stopAvatarDialogue();
+    }
+    
+    hideFunFacts();
+    
+    avatarStoryIndex = 0;
+    playStoryStep();
+}
+
+// Функция проигрывания шага истории
+function playStoryStep() {
+    if (avatarStoryIndex >= weddingStorySteps.length) {
+        // История закончена
+        const groomBubble = document.getElementById('groomBubble');
+        const brideBubble = document.getElementById('brideBubble');
+        
+        setTimeout(() => {
+            showSpeechBubble(groomBubble, "Вот такая у нас история! 💕");
+            setTimeout(() => {
+                hideSpeechBubble(groomBubble);
+                showSpeechBubble(brideBubble, "И это только начало нашего пути! 🌟");
+                setTimeout(() => {
+                    hideSpeechBubble(brideBubble);
+                }, 3000);
+            }, 3000);
+        }, 1000);
+        return;
+    }
+    
+    const currentStep = weddingStorySteps[avatarStoryIndex];
+    const groomBubble = document.getElementById('groomBubble');
+    const brideBubble = document.getElementById('brideBubble');
+    
+    // Показываем реплику жениха
+    showSpeechBubble(groomBubble, currentStep.groom);
+    
+    setTimeout(() => {
+        // Скрываем реплику жениха и показываем невесты
+        hideSpeechBubble(groomBubble);
+        showSpeechBubble(brideBubble, currentStep.bride);
+        
+        setTimeout(() => {
+            // Скрываем реплику невесты
+            hideSpeechBubble(brideBubble);
+            avatarStoryIndex++;
+            
+            // Переходим к следующему шагу
+            setTimeout(() => {
+                playStoryStep();
+            }, 1500);
+        }, 4000);
+    }, 4000);
+}
+
+// Обработчики для интерактивности аватаров
+document.addEventListener('DOMContentLoaded', function() {
+    // Добавляем hover эффекты для аватаров
+    const groomAvatar = document.getElementById('groomAvatar');
+    const brideAvatar = document.getElementById('brideAvatar');
+    
+    if (groomAvatar) {
+        groomAvatar.addEventListener('mouseenter', function() {
+            if (!isDialogueActive) {
+                const bubble = document.getElementById('groomBubble');
+                const greetings = [
+                    "Привет! Я Кирилл! 😊",
+                    "Рад тебя видеть! 👋",
+                    "Добро пожаловать на наш сайт! 🎉",
+                    "Скоро свадьба! Волнуюсь! 😍"
+                ];
+                const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+                showSpeechBubble(bubble, randomGreeting);
+            }
+        });
+        
+        groomAvatar.addEventListener('mouseleave', function() {
+            if (!isDialogueActive) {
+                setTimeout(() => {
+                    hideSpeechBubble(document.getElementById('groomBubble'));
+                }, 2000);
+            }
+        });
+    }
+    
+    if (brideAvatar) {
+        brideAvatar.addEventListener('mouseenter', function() {
+            if (!isDialogueActive) {
+                const bubble = document.getElementById('brideBubble');
+                const greetings = [
+                    "Привет! Я Настя! 💕",
+                    "Как дела? 😊",
+                    "Спасибо, что зашел! ✨",
+                    "Не могу дождаться свадьбы! 👰"
+                ];
+                const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+                showSpeechBubble(bubble, randomGreeting);
+            }
+        });
+        
+        brideAvatar.addEventListener('mouseleave', function() {
+            if (!isDialogueActive) {
+                setTimeout(() => {
+                    hideSpeechBubble(document.getElementById('brideBubble'));
+                }, 2000);
+            }
+        });
+    }
+    
+    // Интерактивное сердечко
+    const heartAnimation = document.querySelector('.heart-animation');
+    if (heartAnimation) {
+        heartAnimation.addEventListener('click', function() {
+            // Создаем эффект взрыва сердечек
+            createHeartExplosion(this);
+            
+            // Показываем романтичное сообщение
+            const groomBubble = document.getElementById('groomBubble');
+            const brideBubble = document.getElementById('brideBubble');
+            
+            if (!isDialogueActive) {
+                showSpeechBubble(groomBubble, "Я люблю тебя, Настя! 💕");
+                setTimeout(() => {
+                    hideSpeechBubble(groomBubble);
+                    showSpeechBubble(brideBubble, "И я тебя, Кирилл! 💖");
+                    setTimeout(() => {
+                        hideSpeechBubble(brideBubble);
+                    }, 3000);
+                }, 2000);
+            }
+        });
+    }
+});
+
+// Функция создания эффекта взрыва сердечек
+function createHeartExplosion(element) {
+    const hearts = ['💕', '💖', '💗', '💘', '💝', '💞', '💟', '❤️', '🧡', '💛', '💚', '💙', '💜'];
+    const rect = element.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    for (let i = 0; i < 12; i++) {
+        const heart = document.createElement('div');
+        heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+        heart.style.position = 'fixed';
+        heart.style.left = centerX + 'px';
+        heart.style.top = centerY + 'px';
+        heart.style.fontSize = '1.5rem';
+        heart.style.pointerEvents = 'none';
+        heart.style.zIndex = '9999';
+        heart.style.transition = 'all 2s ease-out';
+        
+        document.body.appendChild(heart);
+        
+        // Анимируем разлет
+        setTimeout(() => {
+            const angle = (i / 12) * 2 * Math.PI;
+            const distance = 100 + Math.random() * 100;
+            const x = Math.cos(angle) * distance;
+            const y = Math.sin(angle) * distance;
+            
+            heart.style.transform = `translate(${x}px, ${y}px) scale(0)`;
+            heart.style.opacity = '0';
+        }, 50);
+        
+        // Удаляем элемент
+        setTimeout(() => {
+            document.body.removeChild(heart);
+        }, 2100);
+    }
+}
+
+// Функция для анимации глаз, следящих за курсором
+function initEyeTracking() {
+    const pupils = document.querySelectorAll('.pupil');
+    
+    document.addEventListener('mousemove', function(e) {
+        pupils.forEach(pupil => {
+            const eye = pupil.parentElement;
+            const eyeRect = eye.getBoundingClientRect();
+            const eyeCenterX = eyeRect.left + eyeRect.width / 2;
+            const eyeCenterY = eyeRect.top + eyeRect.height / 2;
+            
+            const angle = Math.atan2(e.clientY - eyeCenterY, e.clientX - eyeCenterX);
+            const distance = Math.min(3, Math.hypot(e.clientX - eyeCenterX, e.clientY - eyeCenterY) / 50);
+            
+            const x = Math.cos(angle) * distance;
+            const y = Math.sin(angle) * distance;
+            
+            pupil.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+        });
+    });
+}
+
+// Инициализируем отслеживание глаз при загрузке
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(initEyeTracking, 1000); // Задержка для корректной инициализации
+});
+
+console.log('🎭 Персонализированные аватары инициализированы!');

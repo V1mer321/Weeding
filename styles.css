@@ -3249,3 +3249,657 @@ section {
         bottom: 10px;
     }
 } 
+
+/* Персонализированные аватары */
+.avatars-section {
+    background: linear-gradient(135deg, #FFE4E6, #E8F4FD, #F0F8FF);
+    min-height: 100vh;
+    padding: 80px 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.avatars-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(255, 182, 193, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(173, 216, 230, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(255, 228, 225, 0.2) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.avatars-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.avatars-title {
+    font-family: 'Great Vibes', cursive;
+    font-size: 4rem;
+    text-align: center;
+    margin-bottom: 60px;
+    background: linear-gradient(135deg, #FF69B4, #4169E1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+    0% { filter: brightness(1); }
+    100% { filter: brightness(1.2); }
+}
+
+.avatars-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 60px;
+    flex-wrap: wrap;
+}
+
+/* Карточки аватаров */
+.avatar-card {
+    flex: 1;
+    max-width: 350px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 30px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    transition: all 0.5s ease;
+    position: relative;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.avatar-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+}
+
+.groom-avatar {
+    background: linear-gradient(135deg, rgba(135, 206, 250, 0.8), rgba(255, 255, 255, 0.9));
+    border-color: #87CEEB;
+}
+
+.bride-avatar {
+    background: linear-gradient(135deg, rgba(255, 182, 193, 0.8), rgba(255, 255, 255, 0.9));
+    border-color: #FFB6C1;
+}
+
+/* Персонажи */
+.avatar-character {
+    margin-bottom: 20px;
+    animation: characterBounce 2s ease-in-out infinite;
+}
+
+@keyframes characterBounce {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-5px); }
+}
+
+/* Голова */
+.avatar-head {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 10px;
+    position: relative;
+    background: #FDBCB4;
+    border-radius: 50%;
+    border: 3px solid #F4A460;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Волосы */
+.avatar-hair {
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    right: 10px;
+    height: 60px;
+    border-radius: 50px 50px 30px 30px;
+}
+
+.groom-hair {
+    background: linear-gradient(135deg, #8B4513, #A0522D);
+    top: -5px;
+    height: 40px;
+}
+
+.bride-hair {
+    background: linear-gradient(135deg, #DAA520, #FFD700);
+    height: 70px;
+    top: -15px;
+    left: 5px;
+    right: 5px;
+}
+
+.bride-hair::after {
+    content: '🎀';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.2rem;
+    animation: bowBounce 2s ease-in-out infinite;
+}
+
+@keyframes bowBounce {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+}
+
+/* Лицо */
+.avatar-face {
+    position: absolute;
+    top: 30px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+}
+
+/* Глаза */
+.avatar-eyes {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    padding: 0 15px;
+}
+
+.eye {
+    width: 15px;
+    height: 15px;
+    background: white;
+    border-radius: 50%;
+    border: 2px solid #333;
+    position: relative;
+    animation: eyeBlink 4s infinite;
+}
+
+@keyframes eyeBlink {
+    0%, 90%, 100% { transform: scaleY(1); }
+    95% { transform: scaleY(0.1); }
+}
+
+.pupil {
+    width: 8px;
+    height: 8px;
+    background: #333;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: pupilMove 3s ease-in-out infinite;
+}
+
+@keyframes pupilMove {
+    0%, 100% { transform: translate(-50%, -50%); }
+    25% { transform: translate(-30%, -50%); }
+    75% { transform: translate(-70%, -50%); }
+}
+
+/* Нос */
+.avatar-nose {
+    width: 4px;
+    height: 6px;
+    background: #F4A460;
+    border-radius: 50%;
+    margin: 8px auto;
+}
+
+/* Рот */
+.avatar-mouth {
+    width: 20px;
+    height: 10px;
+    border-radius: 0 0 20px 20px;
+    margin: 5px auto;
+    animation: smileAnimation 3s ease-in-out infinite;
+}
+
+.groom-smile {
+    background: #FF6347;
+    border: 2px solid #DC143C;
+}
+
+.bride-smile {
+    background: #FF69B4;
+    border: 2px solid #FF1493;
+}
+
+@keyframes smileAnimation {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* Тело */
+.avatar-body {
+    width: 80px;
+    height: 100px;
+    margin: 0 auto;
+    position: relative;
+    border-radius: 20px 20px 40px 40px;
+}
+
+.groom-body {
+    background: linear-gradient(135deg, #2F4F4F, #708090);
+}
+
+.bride-body {
+    background: linear-gradient(135deg, #FFB6C1, #FFC0CB);
+}
+
+/* Костюм жениха */
+.avatar-suit {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    height: 60px;
+    background: linear-gradient(135deg, #000080, #191970);
+    border-radius: 15px;
+}
+
+.avatar-tie {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 40px;
+    background: linear-gradient(135deg, #DC143C, #B22222);
+    border-radius: 4px;
+}
+
+/* Платье невесты */
+.avatar-dress {
+    position: absolute;
+    top: 10px;
+    left: 5px;
+    right: 5px;
+    height: 80px;
+    background: linear-gradient(135deg, #F8F8FF, #E6E6FA);
+    border-radius: 20px 20px 50px 50px;
+    border: 2px solid #DDA0DD;
+}
+
+.avatar-necklace {
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 4px;
+    background: #FFD700;
+    border-radius: 2px;
+}
+
+.avatar-necklace::after {
+    content: '💎';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
+}
+
+/* Руки */
+.avatar-arms {
+    display: flex;
+    justify-content: space-between;
+    margin-top: -20px;
+    padding: 0 10px;
+}
+
+.arm {
+    width: 15px;
+    height: 40px;
+    background: #FDBCB4;
+    border-radius: 10px;
+    animation: armWave 3s ease-in-out infinite;
+}
+
+.left-arm {
+    animation-delay: 0s;
+}
+
+.right-arm {
+    animation-delay: 1.5s;
+}
+
+@keyframes armWave {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(15deg); }
+}
+
+/* Информация об аватаре */
+.avatar-info {
+    margin-top: 20px;
+}
+
+.avatar-name {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.groom-avatar .avatar-name {
+    color: #4169E1;
+}
+
+.bride-avatar .avatar-name {
+    color: #FF69B4;
+}
+
+.avatar-traits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+
+.trait {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.trait:hover {
+    transform: scale(1.05);
+    background: rgba(255, 255, 255, 1);
+}
+
+/* Пузыри речи */
+.speech-bubble {
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 15px 20px;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border: 2px solid #FFB6C1;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.5s ease;
+    z-index: 10;
+    min-width: 200px;
+}
+
+.speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #FFB6C1;
+}
+
+.groom-bubble {
+    border-color: #87CEEB;
+}
+
+.groom-bubble::after {
+    border-top-color: #87CEEB;
+}
+
+.speech-bubble.show {
+    opacity: 1;
+    visibility: visible;
+    top: -80px;
+}
+
+.bubble-text {
+    margin: 0;
+    font-size: 1rem;
+    color: #333;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Сердечко между аватарами */
+.avatars-heart {
+    flex-shrink: 0;
+    text-align: center;
+    position: relative;
+}
+
+.heart-animation {
+    font-size: 4rem;
+    animation: heartPulse 2s ease-in-out infinite;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.heart-animation:hover {
+    transform: scale(1.2);
+}
+
+@keyframes heartPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.heart-sparkles {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.sparkle {
+    position: absolute;
+    font-size: 1.5rem;
+    animation: sparkleFloat 3s ease-in-out infinite;
+}
+
+.sparkle:nth-child(1) {
+    top: -30px;
+    left: -20px;
+    animation-delay: 0s;
+}
+
+.sparkle:nth-child(2) {
+    top: -30px;
+    right: -20px;
+    animation-delay: 1s;
+}
+
+.sparkle:nth-child(3) {
+    bottom: -30px;
+    left: -10px;
+    animation-delay: 2s;
+}
+
+@keyframes sparkleFloat {
+    0%, 100% { 
+        opacity: 0;
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% { 
+        opacity: 1;
+        transform: translateY(-10px) rotate(180deg);
+    }
+}
+
+/* Кнопки управления */
+.avatar-controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.avatar-btn {
+    background: linear-gradient(135deg, #FF69B4, #FFB6C1);
+    color: white;
+    border: none;
+    padding: 15px 25px;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(255, 105, 180, 0.3);
+    min-width: 180px;
+}
+
+.avatar-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 105, 180, 0.5);
+    background: linear-gradient(135deg, #FFB6C1, #FF69B4);
+}
+
+.avatar-btn:active {
+    transform: translateY(-1px);
+}
+
+/* Дополнительная информация */
+.avatar-extras {
+    margin-top: 40px;
+}
+
+.fun-facts {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    padding: 30px;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.fun-facts h4 {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #FF69B4;
+}
+
+.facts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.fact-item {
+    background: linear-gradient(135deg, rgba(255, 182, 193, 0.3), rgba(173, 216, 230, 0.3));
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.fact-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.fact-icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.fact-item p {
+    margin: 0;
+    font-size: 1rem;
+    color: #333;
+    line-height: 1.4;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .avatars-section {
+        padding: 60px 15px;
+    }
+    
+    .avatars-title {
+        font-size: 2.8rem;
+        margin-bottom: 40px;
+    }
+    
+    .avatars-content {
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .avatar-card {
+        max-width: 100%;
+        padding: 25px;
+    }
+    
+    .avatars-heart {
+        order: 2;
+    }
+    
+    .heart-animation {
+        font-size: 3rem;
+    }
+    
+    .avatar-controls {
+        gap: 15px;
+    }
+    
+    .avatar-btn {
+        padding: 12px 20px;
+        font-size: 1rem;
+        min-width: 150px;
+    }
+    
+    .facts-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .avatars-title {
+        font-size: 2.2rem;
+    }
+    
+    .avatar-character {
+        transform: scale(0.9);
+    }
+    
+    .avatar-name {
+        font-size: 2rem;
+    }
+    
+    .avatar-controls {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .avatar-btn {
+        width: 100%;
+        max-width: 250px;
+    }
+    
+    .speech-bubble {
+        min-width: 150px;
+        padding: 10px 15px;
+    }
+}

@@ -24,6 +24,7 @@
             <div class="nav-title">Приглашение</div>
             <div class="nav-menu" id="nav-menu">
                 <a href="#home" class="nav-link">Главная</a>
+                <a href="#avatars" class="nav-link">О нас</a>
                 <a href="#countdown" class="nav-link">Отсчет</a>
                 <a href="#menu" class="nav-link">Меню</a>
                 <a href="#survey" class="nav-link">Анкета</a>
@@ -261,6 +262,147 @@
                     <p>Ваше присутствие сделает наш праздник еще более незабываемым</p>
                     <div class="cta-button">
                         <a href="#survey" class="btn-primary">Подтвердить присутствие</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Персонализированные аватары -->
+    <section class="avatars-section" id="avatars">
+        <div class="avatars-container">
+            <h2 class="avatars-title">💕 Познакомьтесь с нами ближе! 💕</h2>
+            
+            <div class="avatars-content">
+                <!-- Аватар жениха -->
+                <div class="avatar-card groom-avatar" id="groomAvatar">
+                    <div class="avatar-character">
+                        <div class="avatar-head">
+                            <div class="avatar-hair groom-hair"></div>
+                            <div class="avatar-face">
+                                <div class="avatar-eyes">
+                                    <div class="eye left-eye">
+                                        <div class="pupil"></div>
+                                    </div>
+                                    <div class="eye right-eye">
+                                        <div class="pupil"></div>
+                                    </div>
+                                </div>
+                                <div class="avatar-nose"></div>
+                                <div class="avatar-mouth groom-smile"></div>
+                            </div>
+                        </div>
+                        <div class="avatar-body groom-body">
+                            <div class="avatar-suit"></div>
+                            <div class="avatar-tie"></div>
+                        </div>
+                        <div class="avatar-arms">
+                            <div class="arm left-arm"></div>
+                            <div class="arm right-arm"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="avatar-info">
+                        <h3 class="avatar-name">Кирилл</h3>
+                        <div class="avatar-traits">
+                            <span class="trait">🎮 Геймер</span>
+                            <span class="trait">☕ Кофеман</span>
+                            <span class="trait">🏋️ Спортсмен</span>
+                        </div>
+                    </div>
+                    
+                    <div class="speech-bubble groom-bubble" id="groomBubble">
+                        <p class="bubble-text">Привет! Я Кирилл! 😊</p>
+                    </div>
+                </div>
+
+                <!-- Сердечко между аватарами -->
+                <div class="avatars-heart">
+                    <div class="heart-animation">💖</div>
+                    <div class="heart-sparkles">
+                        <span class="sparkle">✨</span>
+                        <span class="sparkle">✨</span>
+                        <span class="sparkle">✨</span>
+                    </div>
+                </div>
+
+                <!-- Аватар невесты -->
+                <div class="avatar-card bride-avatar" id="brideAvatar">
+                    <div class="avatar-character">
+                        <div class="avatar-head">
+                            <div class="avatar-hair bride-hair"></div>
+                            <div class="avatar-face">
+                                <div class="avatar-eyes">
+                                    <div class="eye left-eye">
+                                        <div class="pupil"></div>
+                                    </div>
+                                    <div class="eye right-eye">
+                                        <div class="pupil"></div>
+                                    </div>
+                                </div>
+                                <div class="avatar-nose"></div>
+                                <div class="avatar-mouth bride-smile"></div>
+                            </div>
+                        </div>
+                        <div class="avatar-body bride-body">
+                            <div class="avatar-dress"></div>
+                            <div class="avatar-necklace"></div>
+                        </div>
+                        <div class="avatar-arms">
+                            <div class="arm left-arm"></div>
+                            <div class="arm right-arm"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="avatar-info">
+                        <h3 class="avatar-name">Анастасия</h3>
+                        <div class="avatar-traits">
+                            <span class="trait">🎨 Творческая</span>
+                            <span class="trait">📚 Книголюб</span>
+                            <span class="trait">🌸 Романтик</span>
+                        </div>
+                    </div>
+                    
+                    <div class="speech-bubble bride-bubble" id="brideBubble">
+                        <p class="bubble-text">Привет! Я Настя! 💕</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Интерактивные кнопки для диалогов -->
+            <div class="avatar-controls">
+                <button class="avatar-btn" onclick="startAvatarDialogue()">
+                    💬 Начать диалог
+                </button>
+                <button class="avatar-btn" onclick="showFunFacts()">
+                    🎯 Интересные факты
+                </button>
+                <button class="avatar-btn" onclick="playWeddingStory()">
+                    💝 История любви
+                </button>
+            </div>
+
+            <!-- Дополнительная информация -->
+            <div class="avatar-extras" id="avatarExtras">
+                <div class="fun-facts" id="funFacts" style="display: none;">
+                    <h4>🎯 Интересные факты о нас:</h4>
+                    <div class="facts-grid">
+                        <div class="fact-item">
+                            <span class="fact-icon">🎮</span>
+                            <p><strong>Кирилл:</strong> Может играть в игры по 12 часов подряд</p>
+                        </div>
+                        <div class="fact-item">
+                            <span class="fact-icon">🍰</span>
+                            <p><strong>Настя:</strong> Печет самые вкусные торты в мире</p>
+                        </div>
+                        <div class="fact-item">
+                            <span class="fact-icon">😴</span>
+                            <p><strong>Вместе:</strong> Можем проспать до 14:00 в выходные</p>
+                        </div>
+                        <div class="fact-item">
+                            <span class="fact-icon">🎬</span>
+                            <p><strong>Любим:</strong> Смотреть фильмы с попкорном до 3 утра</p>
+                        </div>
                     </div>
                 </div>
             </div>
