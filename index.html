@@ -781,57 +781,15 @@
                 </form>
             </div>
             
-            <!-- Список пожеланий -->
-            <div class="wishes-list-container">
-                <div class="wishes-header">
-                    <h3>💝 Пожелания от гостей</h3>
-                    <div class="wishes-count">
-                        <span id="wishesCount">0</span> пожеланий
-                    </div>
-                </div>
-                
-                <div class="wishes-list" id="wishesList">
-                    <!-- Пример пожелания (будет скрыт после загрузки реальных пожеланий) -->
-                    <div class="wish-item example-wish">
-                        <div class="wish-header">
-                            <div class="wish-author">💕 Организаторы</div>
-                            <div class="wish-date">Сейчас</div>
-                        </div>
-                        <div class="wish-text">
-                            Здесь будут появляться ваши пожелания! Станьте первым, кто поделится добрыми словами для молодоженов ✨
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Кнопка загрузить еще -->
-                <button class="load-more-wishes" id="loadMoreWishes" style="display: none;">
-                    Показать еще пожелания
-                </button>
+            <!-- Скрытые элементы для совместимости с JavaScript -->
+            <div class="wishes-list-container" style="display: none;">
+                <div class="wishes-list" id="wishesList"></div>
+                <button class="load-more-wishes" id="loadMoreWishes" style="display: none;"></button>
             </div>
             
-            <!-- Статистика -->
-            <div class="wishes-stats">
-                <div class="stat-item">
-                    <div class="stat-icon">💌</div>
-                    <div class="stat-info">
-                        <div class="stat-number" id="totalWishes">0</div>
-                        <div class="stat-label">Всего пожеланий</div>
-                    </div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-icon">👥</div>
-                    <div class="stat-info">
-                        <div class="stat-number" id="totalWishers">0</div>
-                        <div class="stat-label">Гостей поздравили</div>
-                    </div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-icon">❤️</div>
-                    <div class="stat-info">
-                        <div class="stat-number">∞</div>
-                        <div class="stat-label">Любви и счастья</div>
-                    </div>
-                </div>
+            <!-- Информация о пожеланиях -->
+            <div class="wishes-info" style="text-align: center; margin-top: 30px; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 15px;">
+                <p style="color: #666; font-style: italic;">💌 Ваши пожелания отправляются нам на почту и будут прочитаны с особым трепетом!</p>
             </div>
         </div>
     </section>

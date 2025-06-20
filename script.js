@@ -767,11 +767,9 @@ let wishesData = [];
 let displayedWishesCount = 0;
 const wishesPerLoad = 5;
 
-// Инициализация секции пожеланий
-async function initWishes() {
-    await loadWishesFromStorage();
-    displayWishes();
-    updateWishesStats();
+// Инициализация секции пожеланий (только форма отправки)
+function initWishes() {
+    loadWishesFromStorage();
     
     // Обработчик формы пожеланий
     const wishForm = document.getElementById('wishForm');
@@ -779,13 +777,18 @@ async function initWishes() {
         wishForm.addEventListener('submit', handleWishSubmit);
     }
     
-    // Обработчик кнопки "Показать еще"
-    const loadMoreBtn = document.getElementById('loadMoreWishes');
-    if (loadMoreBtn) {
-        loadMoreBtn.addEventListener('click', loadMoreWishes);
+    // Скрываем секцию отображения пожеланий
+    const wishesList = document.getElementById('wishesList');
+    if (wishesList) {
+        wishesList.style.display = 'none';
     }
     
-    console.log('✅ Секция пожеланий инициализирована');
+    const loadMoreBtn = document.getElementById('loadMoreWishes');
+    if (loadMoreBtn) {
+        loadMoreBtn.style.display = 'none';
+    }
+    
+    console.log('✅ Секция пожеланий инициализирована (только отправка на почту)');
 }
 
 // Обработка отправки пожелания
@@ -832,11 +835,7 @@ async function handleWishSubmit(e) {
         // Сбросить форму
         form.reset();
         
-        // Обновить отображение
-        displayWishes();
-        updateWishesStats();
-        
-        console.log('✅ Пожелание добавлено:', wishData);
+        console.log('✅ Пожелание отправлено на почту:', wishData);
         
     } catch (error) {
         console.error('❌ Ошибка добавления пожелания:', error);
@@ -849,31 +848,15 @@ async function handleWishSubmit(e) {
     }
 }
 
-// Сохранение пожелания
+// Сохранение пожелания (только отправка на почту)
 async function saveWish(wishData) {
-    // Сохранить в Google Sheets (если URL настроен)
-    if (GOOGLE_SCRIPT_URL) {
-        try {
-            await saveWishToGoogleSheets(wishData);
-            console.log('✅ Пожелание сохранено в Google Sheets');
-        } catch (error) {
-            console.error('❌ Ошибка сохранения в Google Sheets:', error);
-            // Фоллбэк к localStorage
-            wishesData.unshift(wishData);
-            localStorage.setItem('weddingWishes', JSON.stringify(wishesData));
-        }
-    } else {
-        // Фоллбэк к localStorage если Google Sheets не настроен
-        wishesData.unshift(wishData);
-        localStorage.setItem('weddingWishes', JSON.stringify(wishesData));
-    }
-    
-    // Попытаться отправить на Formspree
+    // Отправить на Formspree
     try {
         await sendWishByEmail(wishData);
+        console.log('✅ Пожелание отправлено на почту');
     } catch (error) {
-        console.log('📧 Пожелание не отправлено на Formspree:', error.message);
-        // Не показываем ошибку пользователю, так как пожелание сохранено
+        console.error('❌ Ошибка отправки пожелания на почту:', error);
+        throw error; // Показываем ошибку пользователю
     }
 }
 
@@ -908,98 +891,13 @@ async function sendWishByEmail(wishData) {
     }
 }
 
-// Сохранение пожелания в Google Sheets
-async function saveWishToGoogleSheets(wishData) {
-    if (!GOOGLE_SCRIPT_URL) {
-        throw new Error('Google Script URL не настроен');
-    }
-    
-    // Используем URL параметры для передачи данных
-    const url = new URL(GOOGLE_SCRIPT_URL);
-    url.searchParams.append('name', wishData.name);
-    url.searchParams.append('text', wishData.text);
-    url.searchParams.append('action', 'add');
-    
-    const response = await fetch(url.toString(), {
-        method: 'GET'
-    });
-    
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    
-    const result = await response.json();
-    
-    if (!result.success) {
-        throw new Error(result.message || 'Ошибка сохранения пожелания');
-    }
-    
-    // Обновляем локальные данные
-    wishesData.unshift(result.data);
-    
-    return result.data;
-}
+// Функции Google Sheets удалены - пожелания отправляются только на почту
 
-// Загрузка пожеланий из Google Sheets
-async function loadWishesFromGoogleSheets() {
-    if (!GOOGLE_SCRIPT_URL) {
-        throw new Error('Google Script URL не настроен');
-    }
-    
-    const response = await fetch(GOOGLE_SCRIPT_URL + '?action=get', {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-        }
-    });
-    
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    
-    const result = await response.json();
-    
-    if (!result.success) {
-        throw new Error(result.message || 'Ошибка загрузки пожеланий');
-    }
-    
-    return result.data || [];
-}
-
-// Загрузка пожеланий
-async function loadWishesFromStorage() {
-    // Попытаться загрузить из Google Sheets
-    if (GOOGLE_SCRIPT_URL) {
-        try {
-            wishesData = await loadWishesFromGoogleSheets();
-            console.log(`📚 Загружено ${wishesData.length} пожеланий из Google Sheets`);
-            
-            // Выводим первые несколько пожеланий для отладки
-            if (wishesData.length > 0) {
-                console.log('📝 Первые пожелания:', wishesData.slice(0, 3));
-            }
-            return;
-        } catch (error) {
-            console.error('❌ Ошибка загрузки из Google Sheets:', error);
-            console.log('🔄 Переключаемся на localStorage');
-        }
-    }
-    
-    // Фоллбэк к localStorage
-    try {
-        const stored = localStorage.getItem('weddingWishes');
-        console.log('🔍 Данные из localStorage:', stored);
-        wishesData = stored ? JSON.parse(stored) : [];
-        console.log(`📚 Загружено ${wishesData.length} пожеланий из localStorage`);
-        
-        // Выводим первые несколько пожеланий для отладки
-        if (wishesData.length > 0) {
-            console.log('📝 Первые пожелания:', wishesData.slice(0, 3));
-        }
-    } catch (error) {
-        console.error('❌ Ошибка загрузки пожеланий:', error);
-        wishesData = [];
-    }
+// Загрузка пожеланий (пустая функция - пожелания не отображаются)
+function loadWishesFromStorage() {
+    // Пожелания не отображаются, только отправляются на почту
+    wishesData = [];
+    console.log('📧 Пожелания отправляются только на почту, отображение отключено');
 }
 
 // Отображение пожеланий
@@ -1126,7 +1024,7 @@ function showWishSuccessMessage(name) {
     message.className = 'success-message';
     message.innerHTML = `
         <h3>Спасибо, ${escapeHtml(name)}!</h3>
-        <p>Ваше пожелание добавлено!<br>Кирилл и Анастасия будут очень рады ❤️</p>
+        <p>Ваше пожелание отправлено нам на почту!<br>Кирилл и Анастасия будут очень рады ❤️</p>
     `;
     
     document.body.appendChild(overlay);
@@ -2118,5 +2016,4 @@ function removeWishByContent(name, text) {
 // Добавляем функцию в глобальную область для доступа из консоли
 window.removeWishByContent = removeWishByContent;
 
-// Google Apps Script URL для пожеланий (замените на свой)
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzdxO4LiryJaqizKXKChYiePSUY__VjvzFWKf_QHX1G2d-biZ3Oy27hHl9vmaQ8Y6kJaA/exec';
+// Версия: 2.6 - Убрана функциональность Google Sheets - пожелания отправляются только на почту
