@@ -343,6 +343,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 element.style.maxWidth = '100%';
             });
             
+            // Исправляем мобильный скролл при изменении размера
+            fixMobileScrolling();
+            
         }, 250);
     });
     
@@ -1491,6 +1494,13 @@ function openGallery(type) {
     modal.style.display = 'block';
     document.body.style.overflow = 'hidden';
     
+    // Исправляем скролл для мобильных сразу после открытия галереи
+    setTimeout(() => {
+        if (window.innerWidth <= 768) {
+            fixMobileScrolling();
+        }
+    }, 100);
+    
     // Добавляем обработчики клавиатуры
     document.addEventListener('keydown', handleKeyPress);
 }
@@ -1653,6 +1663,62 @@ function fixTextOverflowIssues() {
     console.log('🔧 Исправление проблем с текстом выполнено');
 }
 
+// Функция исправления мобильного скролла
+function fixMobileScrolling() {
+    if (window.innerWidth <= 768) {
+        // Исправляем все списки и контейнеры с прокруткой
+        const scrollableElements = document.querySelectorAll(`
+            .gallery-thumbnails,
+            .nav-menu,
+            .wishes-list,
+            .radio-group,
+            .survey-form,
+            .features-grid,
+            .timeline-content,
+            .gallery-modal-content
+        `);
+        
+        scrollableElements.forEach(element => {
+            if (element) {
+                element.style.webkitOverflowScrolling = 'touch';
+                element.style.touchAction = 'manipulation';
+                
+                // Для галереи миниатюр добавляем особые настройки
+                if (element.classList.contains('gallery-thumbnails')) {
+                    element.style.overflowX = 'auto';
+                    element.style.overflowY = 'visible';
+                    element.style.whiteSpace = 'nowrap';
+                    element.style.touchAction = 'pan-x';
+                    element.style.flexWrap = 'nowrap';
+                    
+                    // Убираем возможность сжатия миниатюр
+                    const thumbnails = element.querySelectorAll('.gallery-thumbnail');
+                    thumbnails.forEach(thumb => {
+                        thumb.style.flexShrink = '0';
+                        thumb.style.minWidth = thumb.style.width || '50px';
+                    });
+                }
+                
+                // Для навигационного меню
+                if (element.classList.contains('nav-menu')) {
+                    element.style.touchAction = 'pan-y';
+                    element.style.maxHeight = '100vh';
+                }
+            }
+        });
+        
+        // Исправляем модальные окна
+        const galleryModal = document.querySelector('.gallery-modal');
+        if (galleryModal) {
+            galleryModal.style.webkitOverflowScrolling = 'touch';
+            galleryModal.style.touchAction = 'pan-y';
+            galleryModal.style.transform = 'translate3d(0,0,0)';
+        }
+        
+        console.log('📱 Исправления мобильного скролла применены');
+    }
+}
+
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Инициализация сайта...');
@@ -1671,8 +1737,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Исправляем проблемы с текстом сразу после загрузки
     setTimeout(fixTextOverflowIssues, 500);
     
+    // Исправляем мобильный скролл
+    setTimeout(fixMobileScrolling, 800);
+    
     // Периодически проверяем и исправляем проблемы с текстом (для динамического контента)
     setInterval(fixTextOverflowIssues, 5000);
+    
+    // Периодически исправляем мобильный скролл
+    setInterval(fixMobileScrolling, 3000);
     
     console.log('✅ Сайт инициализирован');
 });
