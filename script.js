@@ -134,7 +134,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 transfer: formData.get('transfer'),
                 food: formData.get('food'),
                 alcohol: formData.get('alcohol'),
-                child: formData.get('child')
+                child: formData.get('child'),
+                favoriteSong: formData.get('favoriteSong') || '',
+                toast: formData.get('toast'),
+                games: formData.get('games')
             };
             
             try {
@@ -387,6 +390,9 @@ async function submitToEmail(data) {
                     food: data.food,
                     alcohol: data.alcohol,
                     child: data.child,
+                    favoriteSong: data.favoriteSong,
+                    toast: data.toast,
+                    games: data.games,
                     timestamp: new Date().toLocaleString('ru-RU')
                 })
             });
@@ -413,6 +419,11 @@ async function submitToEmail(data) {
 🍽️ Предпочтения по еде: ${data.food}
 🍷 Алкоголь: ${data.alcohol}
 👶 Ребенок: ${data.child}
+
+🎵 РАЗВЛЕЧЕНИЯ:
+🎶 Любимая песня: ${data.favoriteSong || 'Не указана'}
+🎤 Тост/поздравление: ${data.toast}
+🎉 Участие в конкурсах: ${data.games}
 
 ---
 Отправлено с сайта-приглашения на свадьбу
@@ -488,6 +499,9 @@ function viewAllResponses() {
                                 <p><strong>🍽️ Еда:</strong> ${response.food}</p>
                                 <p><strong>🍷 Алкоголь:</strong> ${response.alcohol}</p>
                                 <p><strong>👶 Ребенок:</strong> ${response.child}</p>
+                                ${response.favoriteSong ? `<p><strong>🎶 Любимая песня:</strong> ${response.favoriteSong}</p>` : ''}
+                                ${response.toast ? `<p><strong>🎤 Тост:</strong> ${response.toast}</p>` : ''}
+                                ${response.games ? `<p><strong>🎉 Конкурсы:</strong> ${response.games}</p>` : ''}
                             </div>
                         </div>
                     `).join('')}
@@ -600,12 +614,45 @@ function closeResponsesPopup() {
 function downloadResponses() {
     try {
         const responses = JSON.parse(localStorage.getItem('weddingResponses') || '[]');
-        const dataStr = JSON.stringify(responses, null, 2);
-        const dataBlob = new Blob([dataStr], {type: 'application/json'});
         
+        // Создаем читаемый текстовый формат
+        const textData = responses.map((response, index) => {
+            let text = `
+=== ОТВЕТ №${index + 1} ===
+👤 Имя: ${response.fullname}
+📅 Дата: ${new Date(response.timestamp).toLocaleString('ru-RU')}
+🚗 Трансфер: ${response.transfer}
+🍽️ Еда: ${response.food}
+🍷 Алкоголь: ${response.alcohol}
+👶 Ребенок: ${response.child}`;
+
+            // Добавляем развлечения, если они есть
+            if (response.favoriteSong || response.toast || response.games) {
+                text += `\n\n🎵 РАЗВЛЕЧЕНИЯ:`;
+                if (response.favoriteSong) text += `\n🎶 Любимая песня: ${response.favoriteSong}`;
+                if (response.toast) text += `\n🎤 Тост: ${response.toast}`;
+                if (response.games) text += `\n🎉 Конкурсы: ${response.games}`;
+            }
+            
+            return text;
+        }).join('\n\n' + '='.repeat(50) + '\n\n');
+        
+        const finalText = `ОТВЕТЫ НА СВАДЕБНУЮ АНКЕТУ
+Кирилл и Анастасия
+Дата свадьбы: 03.10.2025
+Всего ответов: ${responses.length}
+Дата экспорта: ${new Date().toLocaleString('ru-RU')}
+
+${'='.repeat(50)}
+${textData}
+
+${'='.repeat(50)}
+Конец файла`;
+        
+        const dataBlob = new Blob([finalText], {type: 'text/plain;charset=utf-8'});
         const link = document.createElement('a');
         link.href = URL.createObjectURL(dataBlob);
-        link.download = `wedding-responses-${new Date().toISOString().split('T')[0]}.json`;
+        link.download = `wedding-responses-${new Date().toISOString().split('T')[0]}.txt`;
         link.click();
         
         console.log('✅ Файл с ответами скачан');
@@ -711,4 +758,765 @@ function showAdminNotification() {
         `;
         document.head.appendChild(style);
     }
-} 
+}
+
+// === ФУНКЦИОНАЛЬНОСТЬ ПОЖЕЛАНИЙ ===
+
+// Переменные для пожеланий
+let wishesData = [];
+let displayedWishesCount = 0;
+const wishesPerLoad = 5;
+
+// Инициализация секции пожеланий
+function initWishes() {
+    loadWishesFromStorage();
+    displayWishes();
+    updateWishesStats();
+    
+    // Обработчик формы пожеланий
+    const wishForm = document.getElementById('wishForm');
+    if (wishForm) {
+        wishForm.addEventListener('submit', handleWishSubmit);
+    }
+    
+    // Обработчик кнопки "Показать еще"
+    const loadMoreBtn = document.getElementById('loadMoreWishes');
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', loadMoreWishes);
+    }
+    
+    console.log('✅ Секция пожеланий инициализирована');
+}
+
+// Обработка отправки пожелания
+async function handleWishSubmit(e) {
+    e.preventDefault();
+    
+    const form = e.target;
+    const submitBtn = form.querySelector('.wish-submit-btn');
+    const btnText = submitBtn.querySelector('.btn-text');
+    const btnLoading = submitBtn.querySelector('.btn-loading');
+    
+    // Получение данных формы
+    const formData = new FormData(form);
+    const wishData = {
+        name: formData.get('wishName').trim(),
+        text: formData.get('wishText').trim(),
+        timestamp: new Date().toISOString(),
+        id: generateWishId()
+    };
+    
+    // Валидация
+    if (!wishData.name || !wishData.text) {
+        alert('Пожалуйста, заполните все поля');
+        return;
+    }
+    
+    if (wishData.text.length < 10) {
+        alert('Пожелание должно содержать минимум 10 символов');
+        return;
+    }
+    
+    // Показать состояние загрузки
+    submitBtn.classList.add('loading');
+    btnText.style.display = 'none';
+    btnLoading.style.display = 'inline';
+    
+    try {
+        // Сохранить пожелание
+        await saveWish(wishData);
+        
+        // Показать сообщение об успехе
+        showWishSuccessMessage(wishData.name);
+        
+        // Сбросить форму
+        form.reset();
+        
+        // Обновить отображение
+        displayWishes();
+        updateWishesStats();
+        
+        console.log('✅ Пожелание добавлено:', wishData);
+        
+    } catch (error) {
+        console.error('❌ Ошибка добавления пожелания:', error);
+        alert('Произошла ошибка при отправке пожелания. Попробуйте еще раз.');
+    } finally {
+        // Восстановить кнопку
+        submitBtn.classList.remove('loading');
+        btnText.style.display = 'inline';
+        btnLoading.style.display = 'none';
+    }
+}
+
+// Сохранение пожелания
+async function saveWish(wishData) {
+    // Сохранить в localStorage
+    wishesData.unshift(wishData); // Добавить в начало массива
+    localStorage.setItem('weddingWishes', JSON.stringify(wishesData));
+    
+    // Попытаться отправить на Formspree
+    try {
+        await sendWishByEmail(wishData);
+    } catch (error) {
+        console.log('📧 Пожелание не отправлено на Formspree:', error.message);
+        // Не показываем ошибку пользователю, так как пожелание сохранено локально
+    }
+}
+
+// Отправка пожелания на email через Formspree
+async function sendWishByEmail(wishData) {
+    const formData = new FormData();
+    formData.append('name', `💌 Пожелание от ${wishData.name}`);
+    formData.append('email', 'wishes@wedding.com');
+    formData.append('subject', `Новое пожелание от ${wishData.name}`);
+    formData.append('wishAuthor', wishData.name);
+    formData.append('wishText', wishData.text);
+    formData.append('wishDate', formatWishDate(wishData.timestamp));
+    formData.append('_subject', `💌 Новое пожелание от ${wishData.name}`);
+    
+    try {
+        const response = await fetch('https://formspree.io/f/xpwrjrnv', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+        
+        if (response.ok) {
+            console.log('✅ Пожелание отправлено на Formspree');
+        } else {
+            throw new Error('Ошибка отправки на Formspree');
+        }
+    } catch (error) {
+        console.error('❌ Ошибка отправки пожелания на Formspree:', error);
+        throw error;
+    }
+}
+
+// Загрузка пожеланий из localStorage
+function loadWishesFromStorage() {
+    try {
+        const stored = localStorage.getItem('weddingWishes');
+        wishesData = stored ? JSON.parse(stored) : [];
+        console.log(`📚 Загружено ${wishesData.length} пожеланий`);
+    } catch (error) {
+        console.error('❌ Ошибка загрузки пожеланий:', error);
+        wishesData = [];
+    }
+}
+
+// Отображение пожеланий
+function displayWishes() {
+    const wishesList = document.getElementById('wishesList');
+    const loadMoreBtn = document.getElementById('loadMoreWishes');
+    
+    if (!wishesList) return;
+    
+    // Скрыть пример, если есть реальные пожелания
+    const exampleWish = wishesList.querySelector('.example-wish');
+    if (wishesData.length > 0 && exampleWish) {
+        exampleWish.style.display = 'none';
+    }
+    
+    // Очистить существующие пожелания (кроме примера)
+    const existingWishes = wishesList.querySelectorAll('.wish-item:not(.example-wish)');
+    existingWishes.forEach(wish => wish.remove());
+    
+    // Показать пожелания
+    const wishesToShow = wishesData.slice(0, displayedWishesCount + wishesPerLoad);
+    
+    wishesToShow.forEach((wish, index) => {
+        if (index >= displayedWishesCount) {
+            const wishElement = createWishElement(wish);
+            wishesList.appendChild(wishElement);
+        }
+    });
+    
+    displayedWishesCount = wishesToShow.length;
+    
+    // Управление кнопкой "Показать еще"
+    if (loadMoreBtn) {
+        if (displayedWishesCount < wishesData.length) {
+            loadMoreBtn.style.display = 'block';
+            loadMoreBtn.textContent = `Показать еще (${wishesData.length - displayedWishesCount} осталось)`;
+        } else {
+            loadMoreBtn.style.display = 'none';
+        }
+    }
+    
+    // Обновить счетчик
+    updateWishesCount();
+}
+
+// Создание элемента пожелания
+function createWishElement(wish) {
+    const wishDiv = document.createElement('div');
+    wishDiv.className = 'wish-item';
+    
+    wishDiv.innerHTML = `
+        <div class="wish-header">
+            <div class="wish-author">💕 ${escapeHtml(wish.name)}</div>
+            <div class="wish-date">${formatWishDate(wish.timestamp)}</div>
+        </div>
+        <div class="wish-text">${escapeHtml(wish.text)}</div>
+    `;
+    
+    return wishDiv;
+}
+
+// Загрузка дополнительных пожеланий
+function loadMoreWishes() {
+    displayWishes();
+}
+
+// Обновление статистики пожеланий
+function updateWishesStats() {
+    const totalWishesEl = document.getElementById('totalWishes');
+    const totalWishersEl = document.getElementById('totalWishers');
+    
+    if (totalWishesEl) {
+        totalWishesEl.textContent = wishesData.length;
+    }
+    
+    if (totalWishersEl) {
+        // Подсчет уникальных имен
+        const uniqueWishers = new Set(wishesData.map(wish => wish.name.toLowerCase()));
+        totalWishersEl.textContent = uniqueWishers.size;
+    }
+}
+
+// Обновление счетчика пожеланий
+function updateWishesCount() {
+    const wishesCountEl = document.getElementById('wishesCount');
+    if (wishesCountEl) {
+        const count = wishesData.length;
+        wishesCountEl.textContent = count;
+        
+        // Изменение окончания слова
+        const wishesCountContainer = wishesCountEl.parentElement;
+        if (wishesCountContainer) {
+            let word = 'пожеланий';
+            if (count % 10 === 1 && count % 100 !== 11) {
+                word = 'пожелание';
+            } else if ([2, 3, 4].includes(count % 10) && ![12, 13, 14].includes(count % 100)) {
+                word = 'пожелания';
+            }
+            wishesCountContainer.innerHTML = `<span id="wishesCount">${count}</span> ${word}`;
+        }
+    }
+}
+
+// Показ сообщения об успешном добавлении пожелания
+function showWishSuccessMessage(name) {
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay';
+    
+    const message = document.createElement('div');
+    message.className = 'success-message';
+    message.innerHTML = `
+        <h3>Спасибо, ${escapeHtml(name)}!</h3>
+        <p>Ваше пожелание добавлено!<br>Кирилл и Анастасия будут очень рады ❤️</p>
+    `;
+    
+    document.body.appendChild(overlay);
+    document.body.appendChild(message);
+    
+    setTimeout(() => {
+        overlay.classList.add('show');
+        message.classList.add('show');
+    }, 10);
+    
+    const closeMessage = () => {
+        overlay.classList.remove('show');
+        message.classList.remove('show');
+        
+        setTimeout(() => {
+            if (document.body.contains(overlay)) document.body.removeChild(overlay);
+            if (document.body.contains(message)) document.body.removeChild(message);
+        }, 300);
+    };
+    
+    overlay.addEventListener('click', closeMessage);
+    setTimeout(closeMessage, 4000);
+}
+
+// Вспомогательные функции
+function generateWishId() {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2);
+}
+
+function formatWishDate(timestamp) {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHours / 24);
+    
+    if (diffMins < 1) return 'Только что';
+    if (diffMins < 60) return `${diffMins} мин назад`;
+    if (diffHours < 24) return `${diffHours} ч назад`;
+    if (diffDays < 7) return `${diffDays} дн назад`;
+    
+    return date.toLocaleDateString('ru-RU', {
+        day: 'numeric',
+        month: 'short',
+        year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
+    });
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Административные функции для пожеланий
+function viewAllWishes() {
+    if (wishesData.length === 0) {
+        alert('Пожелания еще не добавлены');
+        return;
+    }
+    
+    const popup = document.createElement('div');
+    popup.className = 'responses-popup';
+    popup.innerHTML = `
+        <div class="responses-content">
+            <div class="responses-header">
+                <h2>💌 Все пожелания (${wishesData.length})</h2>
+                <button class="close-btn" onclick="closeWishesPopup()">&times;</button>
+            </div>
+            <div class="wishes-admin-list">
+                ${wishesData.map(wish => `
+                    <div class="response-item">
+                        <h3>${escapeHtml(wish.name)}</h3>
+                        <div class="response-details">
+                            <p><strong>Дата:</strong> ${formatWishDate(wish.timestamp)}</p>
+                            <p><strong>Пожелание:</strong></p>
+                            <p style="font-style: italic; margin-left: 20px;">"${escapeHtml(wish.text)}"</p>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="responses-actions">
+                <button class="download-btn" onclick="downloadWishes()">Скачать все пожелания</button>
+                <button class="clear-btn" onclick="clearAllWishes()">Очистить все пожелания</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(popup);
+}
+
+function closeWishesPopup() {
+    const popup = document.querySelector('.responses-popup');
+    if (popup) document.body.removeChild(popup);
+}
+
+function downloadWishes() {
+    try {
+        const wishesText = wishesData.map(wish => 
+            `${wish.name} (${formatWishDate(wish.timestamp)}):\n"${wish.text}"\n\n`
+        ).join('');
+        
+        const dataBlob = new Blob([wishesText], {type: 'text/plain;charset=utf-8'});
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(dataBlob);
+        link.download = `wedding-wishes-${new Date().toISOString().split('T')[0]}.txt`;
+        link.click();
+        
+        console.log('✅ Пожелания скачаны');
+    } catch (error) {
+        console.error('❌ Ошибка скачивания пожеланий:', error);
+    }
+}
+
+function clearAllWishes() {
+    if (confirm('Вы уверены, что хотите удалить все пожелания? Это действие нельзя отменить.')) {
+        wishesData = [];
+        localStorage.removeItem('weddingWishes');
+        displayedWishesCount = 0;
+        displayWishes();
+        updateWishesStats();
+        closeWishesPopup();
+        alert('Все пожелания удалены');
+        console.log('🗑️ Все пожелания очищены');
+    }
+}
+
+// Расширение функции активации админ-панели
+const originalViewAllResponses = window.viewAllResponses;
+window.viewAllResponses = function() {
+    // Показать оригинальную админ-панель
+    if (originalViewAllResponses) {
+        originalViewAllResponses();
+    }
+    
+    // Добавить кнопку просмотра пожеланий
+    setTimeout(() => {
+        const responsesActions = document.querySelector('.responses-actions');
+        if (responsesActions && !document.getElementById('viewWishesBtn')) {
+            const viewWishesBtn = document.createElement('button');
+            viewWishesBtn.id = 'viewWishesBtn';
+            viewWishesBtn.className = 'download-btn';
+            viewWishesBtn.textContent = 'Посмотреть пожелания';
+            viewWishesBtn.onclick = viewAllWishes;
+            responsesActions.appendChild(viewWishesBtn);
+        }
+    }, 100);
+};
+
+// Инициализация пожеланий при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    // Инициализация пожеланий (с небольшой задержкой для загрузки DOM)
+    setTimeout(initWishes, 100);
+    
+    // Дополнительная оптимизация для мобильных устройств
+    optimizeForMobile();
+});
+
+// Функция оптимизации для мобильных устройств
+function optimizeForMobile() {
+    const isMobile = window.innerWidth <= 768;
+    const isSmallMobile = window.innerWidth <= 480;
+    
+    if (isMobile) {
+        // Отключаем тяжелые CSS-анимации на мобильных
+        const style = document.createElement('style');
+        style.textContent = `
+            .schedule-item,
+            .schedule-icon,
+            .feature-item,
+            .gold-circle,
+            .floating-heart,
+            .sparkle {
+                animation: none !important;
+                transition: none !important;
+                transform: none !important;
+            }
+            
+            .schedule-item:hover,
+            .feature-item:hover {
+                transform: none !important;
+                box-shadow: inherit !important;
+            }
+        `;
+        
+        if (isSmallMobile) {
+            style.textContent += `
+                .schedule-section {
+                    will-change: auto !important;
+                }
+                
+                .schedule-section * {
+                    will-change: auto !important;
+                }
+                
+                /* Принудительно убираем тяжелые эффекты */
+                .schedule-section .decorative-elements {
+                    display: none !important;
+                }
+                
+                .schedule-item {
+                    contain: layout style paint !important;
+                }
+            `;
+        }
+        
+        document.head.appendChild(style);
+        
+        // Отключаем intersection observer анимации на мобильных для секции расписания
+        const scheduleSection = document.querySelector('.schedule-section');
+        if (scheduleSection) {
+            scheduleSection.style.opacity = '1';
+            const scheduleItems = scheduleSection.querySelectorAll('.schedule-item');
+            scheduleItems.forEach(item => {
+                item.style.opacity = '1';
+                item.style.transform = 'none';
+                item.classList.add('animate-in');
+            });
+        }
+        
+        console.log('🚀 Мобильная оптимизация активирована');
+    }
+}
+
+// Галерея фотографий
+let currentGalleryType = '';
+let currentPhotoIndex = 0;
+let galleryPhotos = [];
+
+// Конфигурация галерей с милыми подписями
+const galleryConfig = {
+    groom: {
+        title: 'Фотографии жениха - Кирилл',
+        photos: [
+            {
+                src: 'Жених/photo_2023-01-26_21-45-10.jpg',
+                caption: '😎 Когда понял, что скоро женишься, а паника еще не наступила'
+            },
+            {
+                src: 'Жених/photo_2023-05-17_00-22-54.jpg',
+                caption: '🤵 Репетирую серьезный взгляд для ЗАГСа'
+            },
+            {
+                src: 'Жених/photo_2023-07-30_22-54-24.jpg',
+                caption: '☀️ Летнее настроение и мысли о будущей жене'
+            },
+            {
+                src: 'Жених/photo_2023-08-15_00-09-01.jpg',
+                caption: '🌙 Ночные размышления: "А кольцо точно красивое?"'
+            },
+            {
+                src: 'Жених/photo_2023-09-14_22-24-42.jpg',
+                caption: '🍂 Осенний романтик в поисках идеального предложения'
+            },
+            {
+                src: 'Жених/photo_2023-09-14_22-24-40.jpg',
+                caption: '📸 Когда друг сказал "улыбнись естественно"'
+            },
+            {
+                src: 'Жених/photo_2023-09-15_23-29-22.jpg',
+                caption: '🌟 Тот самый взгляд, который покорил Настю'
+            },
+            {
+                src: 'Жених/photo_2023-09-17_21-42-00.jpg',
+                caption: '💭 Думаю о том, как сказать "Да" красиво'
+            },
+            {
+                src: 'Жених/photo_2024-04-04_10-41-04.jpg',
+                caption: '🌸 Весенние планы на свадьбу уже в голове'
+            },
+            {
+                src: 'Жених/photo_2024-04-13_00-24-38.jpg',
+                caption: '🎯 Сосредоточенно выбираю костюм для торжества'
+            },
+            {
+                src: 'Жених/photo_2024-05-28_12-23-35.jpg',
+                caption: '☕ Утренний кофе и мысли о медовом месяце'
+            },
+            {
+                src: 'Жених/photo_2024-05-30_12-26-40.jpg',
+                caption: '😄 Когда понял, что невеста согласилась!'
+            },
+            {
+                src: 'Жених/photo_2024-08-24_19-00-16.jpg',
+                caption: '🎉 Праздничное настроение за несколько месяцев до свадьбы'
+            },
+            {
+                src: 'Жених/photo_2024-11-30_14-19-51 (2).jpg',
+                caption: '👔 Последние приготовления... Скоро большой день!'
+            }
+        ]
+    },
+    bride: {
+        title: 'Фотографии невесты - Анастасия',
+        photos: [
+            {
+                src: 'Невеста/photo_2023-02-24_18-38-41.jpg',
+                caption: '💕 Когда еще не знала, что скоро станет невестой'
+            },
+            {
+                src: 'Невеста/photo_2024-10-26_17-06-43.jpg',
+                caption: '👰 Мечтаю о платье принцессы'
+            },
+            {
+                src: 'Невеста/photo_2024-10-28_18-50-43.jpg',
+                caption: '✨ Тот самый взгляд, который свел Кирилла с ума'
+            },
+            {
+                src: 'Невеста/photo_2024-10-29_22-21-59.jpg',
+                caption: '🌙 Вечерние мечты о свадебном дне'
+            },
+            {
+                src: 'Невеста/photo_2024-11-13_15-38-52.jpg',
+                caption: '🍃 Естественная красота будущей жены'
+            },
+            {
+                src: 'Невеста/photo_2024-11-30_14-19-51.jpg',
+                caption: '💍 Примеряю образ счастливой невесты'
+            },
+            {
+                src: 'Невеста/photo_2025-05-17_09-23-14.jpg',
+                caption: '🌺 Весенняя свежесть и предвкушение счастья'
+            },
+            {
+                src: 'Невеста/photo_2025-06-06_20-18-37.jpg',
+                caption: '😊 Улыбка, которая скажет "Да!" в ЗАГСе'
+            },
+            {
+                src: 'Невеста/photo_2025-06-16_11-46-25.jpg',
+                caption: '👑 Готовлюсь стать королевой этого дня'
+            }
+        ]
+    }
+};
+
+function openGallery(type) {
+    currentGalleryType = type;
+    currentPhotoIndex = 0;
+    galleryPhotos = galleryConfig[type].photos;
+    
+    if (galleryPhotos.length === 0) {
+        alert('Фотографии скоро будут добавлены! 📸');
+        return;
+    }
+    
+    const modal = document.getElementById('galleryModal');
+    const title = document.getElementById('galleryTitle');
+    
+    title.textContent = galleryConfig[type].title;
+    
+    // Загружаем первое фото
+    loadPhoto(0);
+    
+    // Создаем миниатюры
+    createThumbnails();
+    
+    // Показываем модальное окно
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    
+    // Добавляем обработчики клавиатуры
+    document.addEventListener('keydown', handleKeyPress);
+}
+
+function closeGallery() {
+    const modal = document.getElementById('galleryModal');
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+    
+    // Удаляем обработчики клавиатуры
+    document.removeEventListener('keydown', handleKeyPress);
+}
+
+function loadPhoto(index) {
+    if (index < 0 || index >= galleryPhotos.length) return;
+    
+    currentPhotoIndex = index;
+    const mainPhoto = document.getElementById('mainPhoto');
+    const photoData = galleryPhotos[index];
+    
+    mainPhoto.src = photoData.src;
+    mainPhoto.alt = photoData.caption;
+    
+    // Обновляем подпись
+    updatePhotoCaption(photoData.caption);
+    
+    // Обновляем активную миниатюру
+    updateActiveThumbnail();
+}
+
+function previousPhoto() {
+    const newIndex = currentPhotoIndex > 0 ? currentPhotoIndex - 1 : galleryPhotos.length - 1;
+    loadPhoto(newIndex);
+}
+
+function nextPhoto() {
+    const newIndex = currentPhotoIndex < galleryPhotos.length - 1 ? currentPhotoIndex + 1 : 0;
+    loadPhoto(newIndex);
+}
+
+function createThumbnails() {
+    const container = document.getElementById('galleryThumbnails');
+    container.innerHTML = '';
+    
+    galleryPhotos.forEach((photoData, index) => {
+        const thumbnail = document.createElement('img');
+        thumbnail.src = photoData.src;
+        thumbnail.alt = photoData.caption;
+        thumbnail.className = 'gallery-thumbnail';
+        thumbnail.title = photoData.caption;
+        thumbnail.onclick = () => loadPhoto(index);
+        
+        if (index === 0) {
+            thumbnail.classList.add('active');
+        }
+        
+        container.appendChild(thumbnail);
+    });
+}
+
+function updateActiveThumbnail() {
+    const thumbnails = document.querySelectorAll('.gallery-thumbnail');
+    thumbnails.forEach((thumb, index) => {
+        thumb.classList.toggle('active', index === currentPhotoIndex);
+    });
+}
+
+function updatePhotoCaption(caption) {
+    const captionElement = document.getElementById('photoCaption');
+    if (captionElement) {
+        captionElement.textContent = caption;
+        captionElement.style.opacity = '1';
+        
+        // Скрываем подпись через 4 секунды, затем показываем снова
+        setTimeout(() => {
+            captionElement.style.opacity = '0.7';
+        }, 4000);
+    }
+}
+
+function handleKeyPress(e) {
+    switch(e.key) {
+        case 'Escape':
+            closeGallery();
+            break;
+        case 'ArrowLeft':
+            previousPhoto();
+            break;
+        case 'ArrowRight':
+            nextPhoto();
+            break;
+    }
+}
+
+// Функция для динамического добавления фотографий с подписями
+function addPhotosToGallery(type, photosWithCaptions) {
+    if (galleryConfig[type]) {
+        galleryConfig[type].photos = photosWithCaptions;
+        console.log(`Добавлено ${photosWithCaptions.length} фотографий для ${type}`);
+    }
+}
+
+// Пример использования:
+// addPhotosToGallery('groom', [
+//     { src: 'path/to/photo1.jpg', caption: 'Милая подпись к фото' },
+//     { src: 'path/to/photo2.jpg', caption: 'Еще одна подпись' }
+// ]);
+
+// Закрытие галереи при клике вне изображения
+document.addEventListener('click', function(e) {
+    const modal = document.getElementById('galleryModal');
+    if (e.target === modal) {
+        closeGallery();
+    }
+});
+
+
+
+// Инициализация при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Инициализация сайта...');
+    
+    // Обновляем счетчик
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+    
+    // Загружаем сохраненные пожелания
+    loadWishesFromStorage();
+    displayWishes();
+    updateWishesStats();
+    
+    // Инициализируем пожелания
+    initWishes();
+    
+    // Инициализируем карту (если элемент существует)
+    if (document.getElementById('map')) {
+        initMap();
+    }
+    
+    console.log('✅ Сайт инициализирован');
+});

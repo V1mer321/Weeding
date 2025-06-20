@@ -8,12 +8,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Allura&family=Dancing+Script:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js?v=1.1" defer></script>
+    
+
 </head>
 <body>
-
-
-
-    
     <!-- Навигация -->
     <nav class="main-nav">
         <div class="nav-container">
@@ -28,9 +27,11 @@
                 <a href="#countdown" class="nav-link">Отсчет</a>
                 <a href="#menu" class="nav-link">Меню</a>
                 <a href="#survey" class="nav-link">Анкета</a>
+                <a href="#wishes" class="nav-link">Пожелания</a>
                 <a href="#schedule" class="nav-link">Расписание</a>
                 <a href="#location" class="nav-link">Место</a>
             </div>
+
         </div>
     </nav>
 
@@ -132,7 +133,7 @@
             
             <!-- Карточки молодоженов -->
             <div class="couple-info">
-                <div class="person-card groom">
+                <div class="person-card groom" onclick="openGallery('groom')">
                     <div class="person-photo">
                                                     <img src="Жених.jpg" alt="Жених">
                         <div class="person-overlay">
@@ -141,6 +142,7 @@
                     </div>
                     <h3 class="person-name">Кирилл</h3>
                     <p class="person-description">Любящий, заботливый, с прекрасным чувством юмора</p>
+                    <div class="gallery-hint">📸 Нажмите, чтобы посмотреть фото</div>
                 </div>
                 
                 <div class="heart-separator">
@@ -148,7 +150,7 @@
                     <div class="plus">+</div>
                 </div>
                 
-                <div class="person-card bride">
+                <div class="person-card bride" onclick="openGallery('bride')">
                     <div class="person-photo">
                                                  <img src="невеста1.jpg" alt="Невеста">
                         <div class="person-overlay">
@@ -157,6 +159,7 @@
                     </div>
                     <h3 class="person-name">Анастасия</h3>
                     <p class="person-description">Нежная, умная, с добрым сердцем</p>
+                    <div class="gallery-hint">📸 Нажмите, чтобы посмотреть фото</div>
                 </div>
             </div>
             
@@ -254,7 +257,7 @@
             <!-- Призыв к действию -->
             <div class="call-to-action">
                 <div class="cta-content">
-                    <h3>🎉 Будьте с нами в этот особенный день!</h3>
+                    <h3>🎉 Разделите с нами радость этого дня!</h3>
                     <p>Ваше присутствие сделает наш праздник еще более незабываемым</p>
                     <div class="cta-button">
                         <a href="#survey" class="btn-primary">Подтвердить присутствие</a>
@@ -353,7 +356,7 @@
             
             <h2 class="section-title fancy">Ждем Вас!</h2>
             <div class="final-note">
-                <p>Будем благодарны, если при выборе нарядов на наше торжество вы придерживались следующей палитры</p>
+                <p>Будем рады, если вы выберете наряды в этих прекрасных тонах</p>
             </div>
             
             <div class="color-palette">
@@ -383,105 +386,196 @@
                 </div>
                 
                 <div class="question-block">
-                    <h3>Нужен ли вам трансфер?</h3>
+                    <h3>🚐 Нужен ли вам трансфер?</h3>
                     <div class="radio-group">
                         <label class="radio-label">
-                            <input type="radio" name="transfer" value="Нет" required>
+                            <input type="radio" name="transfer" value="🚗 Нет, добираюсь сам" required>
                             <span class="radio-custom"></span>
-                            Нет
+                            🚗 Нет, добираюсь сам
                         </label>
                         <label class="radio-label">
-                            <input type="radio" name="transfer" value="Только до торжества" required>
+                            <input type="radio" name="transfer" value="🚐 Только до торжества" required>
                             <span class="radio-custom"></span>
-                            Только до торжества
+                            🚐 Только до торжества
                         </label>
                         <label class="radio-label">
-                            <input type="radio" name="transfer" value="Только после торжества" required>
+                            <input type="radio" name="transfer" value="🏠 Только после торжества" required>
                             <span class="radio-custom"></span>
-                            Только после торжества
+                            🏠 Только после торжества
                         </label>
                         <label class="radio-label">
-                            <input type="radio" name="transfer" value="До и после торжества" required>
+                            <input type="radio" name="transfer" value="🔄 До и после торжества" required>
                             <span class="radio-custom"></span>
-                            До и после торжества
+                            🔄 До и после торжества
                         </label>
                     </div>
                 </div>
                 
                 <div class="question-block">
-                    <h3>Есть ли у вас особые предпочтения по еде</h3>
+                    <h3>🍽️ Есть ли у вас особые предпочтения по еде?</h3>
                     <div class="radio-group">
                         <label class="radio-label">
-                            <input type="radio" name="food" value="нет" required>
+                            <input type="radio" name="food" value="😋 Ем всё с удовольствием" required>
                             <span class="radio-custom"></span>
-                            нет
+                            😋 Ем всё с удовольствием
                         </label>
                         <label class="radio-label">
-                            <input type="radio" name="food" value="не ем мясо" required>
+                            <input type="radio" name="food" value="🥗 Не ем мясо" required>
                             <span class="radio-custom"></span>
-                            не ем мясо
+                            🥗 Не ем мясо
                         </label>
                         <label class="radio-label">
-                            <input type="radio" name="food" value="не ем рыбу" required>
+                            <input type="radio" name="food" value="🐟 Не ем рыбу" required>
                             <span class="radio-custom"></span>
-                            не ем рыбу
+                            🐟 Не ем рыбу
                         </label>
                         <label class="radio-label">
-                            <input type="radio" name="food" value="вегетарианец" required>
+                            <input type="radio" name="food" value="🌱 Вегетарианец" required>
                             <span class="radio-custom"></span>
-                            вегетарианец
+                            🌱 Вегетарианец
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="food" value="🌿 Веган" required>
+                            <span class="radio-custom"></span>
+                            🌿 Веган
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="food" value="🌶️ Не ем острое" required>
+                            <span class="radio-custom"></span>
+                            🌶️ Не ем острое
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="food" value="🥜 Аллергия на орехи" required>
+                            <span class="radio-custom"></span>
+                            🥜 Аллергия на орехи
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="food" value="🥛 Не переношу лактозу" required>
+                            <span class="radio-custom"></span>
+                            🥛 Не переношу лактозу
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="food" value="🍞 Безглютеновая диета" required>
+                            <span class="radio-custom"></span>
+                            🍞 Безглютеновая диета
                         </label>
                     </div>
                 </div>
                 
                 <div class="question-block">
-                    <h3>Какой алкоголь вы предпочитаете?</h3>
+                    <h3>🍷 Какой алкоголь вы предпочитаете?</h3>
                     <div class="radio-group">
                         <label class="radio-label">
-                            <input type="radio" name="alcohol" value="Красное вино" required>
+                            <input type="radio" name="alcohol" value="🍷 Красное вино" required>
                             <span class="radio-custom"></span>
-                            Красное вино
+                            🍷 Красное вино
                         </label>
                         <label class="radio-label">
-                            <input type="radio" name="alcohol" value="Белое вино" required>
+                            <input type="radio" name="alcohol" value="🥂 Белое вино" required>
                             <span class="radio-custom"></span>
-                            Белое вино
+                            🥂 Белое вино
                         </label>
                         <label class="radio-label">
-                            <input type="radio" name="alcohol" value="Шампанское" required>
+                            <input type="radio" name="alcohol" value="🍾 Шампанское" required>
                             <span class="radio-custom"></span>
-                            Шампанское
+                            🍾 Шампанское
                         </label>
                         <label class="radio-label">
-                            <input type="radio" name="alcohol" value="Виски/коньяк" required>
+                            <input type="radio" name="alcohol" value="🥃 Виски/коньяк" required>
                             <span class="radio-custom"></span>
-                            Виски/коньяк
+                            🥃 Виски/коньяк
                         </label>
                         <label class="radio-label">
-                            <input type="radio" name="alcohol" value="Водка" required>
+                            <input type="radio" name="alcohol" value="🍺 Пиво" required>
                             <span class="radio-custom"></span>
-                            Водка
+                            🍺 Пиво
                         </label>
                         <label class="radio-label">
-                            <input type="radio" name="alcohol" value="Не буду пить алкоголь" required>
+                            <input type="radio" name="alcohol" value="🍸 Коктейли" required>
                             <span class="radio-custom"></span>
-                            Не буду пить алкоголь
+                            🍸 Коктейли
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="alcohol" value="🔥 Водка" required>
+                            <span class="radio-custom"></span>
+                            🔥 Водка
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="alcohol" value="🥛 Не буду пить алкоголь" required>
+                            <span class="radio-custom"></span>
+                            🥛 Не буду пить алкоголь
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="alcohol" value="🤷 Всё равно, что угодно" required>
+                            <span class="radio-custom"></span>
+                            🤷 Всё равно, что угодно
                         </label>
                     </div>
                 </div>
                 
                 <div class="question-block">
-                    <h3>Будет ли с вами на празднике ребенок?</h3>
+                    <h3>👶 Будет ли с вами на празднике ребенок?</h3>
                     <div class="radio-group">
                         <label class="radio-label">
-                            <input type="radio" name="child" value="Да" required>
+                            <input type="radio" name="child" value="👶 Да, будет ребенок" required>
                             <span class="radio-custom"></span>
-                            Да
+                            👶 Да, будет ребенок
                         </label>
                         <label class="radio-label">
-                            <input type="radio" name="child" value="Нет" required>
+                            <input type="radio" name="child" value="👤 Нет, только взрослые" required>
                             <span class="radio-custom"></span>
-                            Нет
+                            👤 Нет, только взрослые
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Развлечения -->
+                <div class="question-block">
+                    <h3>🎵 Есть ли у вас любимая песня для танцев?</h3>
+                    <input type="text" name="favoriteSong" class="text-input" placeholder="Напишите название песни и исполнителя (необязательно)">
+                    <small style="color: #666; font-style: italic; margin-top: 5px; display: block;">
+                        Мы постараемся включить вашу песню в программу! 🎶
+                    </small>
+                </div>
+                
+                <div class="question-block">
+                    <h3>🎤 Хотели бы выступить с тостом/поздравлением?</h3>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="toast" value="🎤 Да, хочу выступить с поздравлением" required>
+                            <span class="radio-custom"></span>
+                            🎤 Да, хочу выступить с поздравлением
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="toast" value="🤔 Возможно, если попросят" required>
+                            <span class="radio-custom"></span>
+                            🤔 Возможно, если попросят
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="toast" value="👂 Предпочитаю слушать других" required>
+                            <span class="radio-custom"></span>
+                            👂 Предпочитаю слушать других
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <h3>🎉 Участвуете в свадебных конкурсах и играх? <small style="color: #8B7355; font-style: italic;">(всё равно будете) 😄</small></h3>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="games" value="🎉 Да, с удовольствием!" required>
+                            <span class="radio-custom"></span>
+                            🎉 Да, с удовольствием!
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="games" value="👀 Только смотрю (но всё равно втянут)" required>
+                            <span class="radio-custom"></span>
+                            👀 Только смотрю (но всё равно втянут)
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="games" value="😅 Предпочитаю без меня (но понимаю, что не получится)" required>
+                            <span class="radio-custom"></span>
+                            😅 Предпочитаю без меня (но понимаю, что не получится)
                         </label>
                     </div>
                 </div>
@@ -495,6 +589,111 @@
                     Посмотреть все ответы (для организаторов)
                 </button>
             </form>
+        </div>
+    </section>
+
+    <!-- Пожелания -->
+    <section class="wishes-section" id="wishes">
+        <div class="decorative-elements">
+            <div class="gold-circle gold-1"></div>
+            <div class="gold-circle gold-2"></div>
+            <div class="gold-circle gold-3"></div>
+            <div class="gold-circle gold-4"></div>
+            
+            <!-- Floating elements for wishes -->
+            <div class="floating-heart heart-1">💕</div>
+            <div class="floating-heart heart-2">💖</div>
+            <div class="floating-heart heart-3">❤️</div>
+            
+            <div class="sparkle sparkle-1">✨</div>
+            <div class="sparkle sparkle-2">⭐</div>
+            <div class="sparkle sparkle-3">✨</div>
+        </div>
+        
+        <div class="wishes-content">
+            <!-- Enhanced title section -->
+            <div class="title-section">
+                <div class="decorative-line"></div>
+                <h2 class="fancy-title">💌 Пожелания молодоженам 💌</h2>
+                <div class="decorative-line"></div>
+            </div>
+            
+            <div class="wishes-subtitle">
+                <p>Поделитесь своими добрыми пожеланиями с Кириллом и Анастасией!</p>
+            </div>
+            
+            <!-- Форма для добавления пожелания -->
+            <div class="wish-form-container">
+                <form id="wishForm" class="wish-form">
+                    <div class="form-group">
+                        <label for="wishName">Ваше имя</label>
+                        <input type="text" id="wishName" name="wishName" placeholder="Введите ваше имя" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="wishText">Ваше пожелание</label>
+                        <textarea id="wishText" name="wishText" placeholder="Желаю вам..." rows="4" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="wish-submit-btn">
+                        <span class="btn-text">💕 Отправить пожелание</span>
+                        <span class="btn-loading" style="display: none;">Отправка...</span>
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Список пожеланий -->
+            <div class="wishes-list-container">
+                <div class="wishes-header">
+                    <h3>💝 Пожелания от гостей</h3>
+                    <div class="wishes-count">
+                        <span id="wishesCount">0</span> пожеланий
+                    </div>
+                </div>
+                
+                <div class="wishes-list" id="wishesList">
+                    <!-- Пример пожелания (будет скрыт после загрузки реальных пожеланий) -->
+                    <div class="wish-item example-wish">
+                        <div class="wish-header">
+                            <div class="wish-author">💕 Организаторы</div>
+                            <div class="wish-date">Сейчас</div>
+                        </div>
+                        <div class="wish-text">
+                            Здесь будут появляться ваши пожелания! Станьте первым, кто поделится добрыми словами для молодоженов ✨
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Кнопка загрузить еще -->
+                <button class="load-more-wishes" id="loadMoreWishes" style="display: none;">
+                    Показать еще пожелания
+                </button>
+            </div>
+            
+            <!-- Статистика -->
+            <div class="wishes-stats">
+                <div class="stat-item">
+                    <div class="stat-icon">💌</div>
+                    <div class="stat-info">
+                        <div class="stat-number" id="totalWishes">0</div>
+                        <div class="stat-label">Всего пожеланий</div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-info">
+                        <div class="stat-number" id="totalWishers">0</div>
+                        <div class="stat-label">Гостей поздравили</div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">❤️</div>
+                    <div class="stat-info">
+                        <div class="stat-number">∞</div>
+                        <div class="stat-label">Любви и счастья</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -710,6 +909,30 @@
 
 
 
-    <script src="script.js"></script>
+    <!-- Модальное окно галереи -->
+    <div id="galleryModal" class="gallery-modal">
+        <div class="gallery-modal-content">
+            <div class="gallery-header">
+                <h3 id="galleryTitle">Фотографии</h3>
+                <span class="gallery-close" onclick="closeGallery()">&times;</span>
+            </div>
+            <div class="gallery-container">
+                <div class="gallery-main">
+                    <img id="mainPhoto" src="" alt="">
+                    <div class="gallery-nav">
+                        <button class="gallery-prev" onclick="previousPhoto()">❮</button>
+                        <button class="gallery-next" onclick="nextPhoto()">❯</button>
+                    </div>
+                    <div class="photo-caption" id="photoCaption">
+                        <!-- Подпись к фотографии -->
+                    </div>
+                </div>
+                <div class="gallery-thumbnails" id="galleryThumbnails">
+                    <!-- Миниатюры будут добавлены динамически -->
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html> 
