@@ -2120,4 +2120,4 @@ function removeWishByContent(name, text) {
 window.removeWishByContent = removeWishByContent;
 
 // Google Apps Script URL для пожеланий (замените на свой)
-const GOOGLE_SCRIPT_URL = ''; // Вставьте сюда URL вашего Google Apps Script
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyW8siCU_SPPKm42sBzl7IsL6GXtnUM_KeVgXDW3JsJaP_1UDE268IayJyTi5XSHsSfDQ/exec';
