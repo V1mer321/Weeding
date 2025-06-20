@@ -374,7 +374,7 @@ async function submitToEmail(data) {
     
     // ВАРИАНТ 1: Formspree (рекомендуемый)
     // Замените YOUR_FORM_ID на ваш ID из formspree.io
-    const FORMSPREE_ID = 'mgvylenq'; // Ваш реальный Formspree ID
+    const FORMSPREE_ID = 'YOUR_FORM_ID'; // Временно отключаем Formspree
     
     if (FORMSPREE_ID !== 'YOUR_FORM_ID') {
         try {
