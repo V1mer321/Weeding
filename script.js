@@ -1208,24 +1208,15 @@ function optimizeForMobile() {
     const isVerySmallMobile = window.innerWidth <= 320;
     
     if (isMobile) {
-        // Отключаем тяжелые CSS-анимации на мобильных
+        // Восстанавливаем все анимации! ✨ Боковые элементы снова работают!
         const style = document.createElement('style');
         style.textContent = `
-            .schedule-item,
-            .schedule-icon,
-            .feature-item,
+            /* Все анимации теперь работают на мобильных! */
             .gold-circle,
             .floating-heart,
-            .sparkle {
-                animation: none !important;
-                transition: none !important;
-                transform: none !important;
-            }
-            
-            .schedule-item:hover,
-            .feature-item:hover {
-                transform: none !important;
-                box-shadow: inherit !important;
+            .sparkle,
+            .side-ornament {
+                /* Анимации восстановлены! */
             }
             
             /* Улучшенная типография для мобильных */

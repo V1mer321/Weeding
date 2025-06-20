@@ -4225,31 +4225,8 @@ section {
         overflow-wrap: break-word;
     }
     
-    /* Оставляем декоративные элементы, но уменьшаем их количество на мобильных */
-    .side-ornament.left-3,
-    .side-ornament.left-4,
-    .side-ornament.left-5,
-    .side-ornament.right-3,
-    .side-ornament.right-4,
-    .side-ornament.right-5,
-    .gold-7, .gold-8, .gold-9, .gold-10, .gold-11, .gold-12,
-    .heart-4, .heart-5,
-    .sparkle-4, .sparkle-5 {
-        display: none;
-    }
-    
-    /* Уменьшаем размер оставшихся элементов на мобильных */
-    .side-ornament,
-    .floating-heart,
-    .sparkle {
-        font-size: 1.5rem !important;
-        opacity: 0.4 !important;
-    }
-    
-    .gold-circle {
-        transform: scale(0.7) !important;
-        opacity: 0.5 !important;
-    }
+    /* Восстановлены все боковые анимации! ✨ */
+    /* Все декоративные элементы снова работают на всех устройствах */
     
     /* Исправление навигации */
     .nav-menu {
