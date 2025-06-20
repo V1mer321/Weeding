@@ -331,6 +331,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 navMenu.classList.remove('active');
                 hamburger.classList.remove('active');
             }
+            
+            // Перезапускаем мобильную оптимизацию при изменении размера
+            optimizeForMobile();
+            
+            // Исправляем потенциальные проблемы с текстом
+            const textElements = document.querySelectorAll('.restaurant-address, .schedule-info p, .detail-item, .note-content li');
+            textElements.forEach(element => {
+                element.style.wordWrap = 'break-word';
+                element.style.overflowWrap = 'break-word';
+                element.style.maxWidth = '100%';
+            });
+            
         }, 250);
     });
     
@@ -1190,6 +1202,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function optimizeForMobile() {
     const isMobile = window.innerWidth <= 768;
     const isSmallMobile = window.innerWidth <= 480;
+    const isVerySmallMobile = window.innerWidth <= 320;
     
     if (isMobile) {
         // Отключаем тяжелые CSS-анимации на мобильных
@@ -1211,6 +1224,36 @@ function optimizeForMobile() {
                 transform: none !important;
                 box-shadow: inherit !important;
             }
+            
+            /* Улучшенная типография для мобильных */
+            body {
+                font-size: ${isVerySmallMobile ? '14px' : isSmallMobile ? '15px' : '16px'};
+                line-height: 1.5;
+            }
+            
+            /* Исправление переполнения текста */
+            * {
+                word-wrap: break-word !important;
+                overflow-wrap: break-word !important;
+                hyphens: auto !important;
+            }
+            
+            /* Убираем горизонтальную прокрутку */
+            html, body {
+                overflow-x: hidden !important;
+                max-width: 100% !important;
+            }
+            
+            /* Исправляем контейнеры */
+            .schedule-content,
+            .hero-content,
+            .section-content,
+            .nav-container {
+                padding-left: 10px !important;
+                padding-right: 10px !important;
+                max-width: 100% !important;
+                box-sizing: border-box !important;
+            }
         `;
         
         if (isSmallMobile) {
@@ -1231,6 +1274,55 @@ function optimizeForMobile() {
                 .schedule-item {
                     contain: layout style paint !important;
                 }
+                
+                /* Улучшенная адаптация для маленьких экранов */
+                .restaurant-address {
+                    font-size: 0.8rem !important;
+                    line-height: 1.4 !important;
+                    margin-bottom: 10px !important;
+                }
+                
+                .schedule-info p {
+                    font-size: 0.85rem !important;
+                    line-height: 1.4 !important;
+                }
+                
+                .detail-item {
+                    font-size: 0.8rem !important;
+                    line-height: 1.3 !important;
+                    margin-bottom: 5px !important;
+                }
+            `;
+        }
+        
+        if (isVerySmallMobile) {
+            style.textContent += `
+                /* Специальные исправления для очень маленьких экранов */
+                .main-title {
+                    font-size: 1.8rem !important;
+                    line-height: 1.1 !important;
+                }
+                
+                .fancy-title {
+                    font-size: 1.5rem !important;
+                    line-height: 1.2 !important;
+                    margin-bottom: 10px !important;
+                }
+                
+                .schedule-info h3 {
+                    font-size: 1rem !important;
+                    line-height: 1.2 !important;
+                    margin-bottom: 5px !important;
+                }
+                
+                .schedule-info h4 {
+                    font-size: 0.9rem !important;
+                    margin-bottom: 3px !important;
+                }
+                
+                .nav-title {
+                    font-size: 0.9rem !important;
+                }
             `;
         }
         
@@ -1248,7 +1340,18 @@ function optimizeForMobile() {
             });
         }
         
-        console.log('🚀 Мобильная оптимизация активирована');
+        // Принудительно исправляем переполнение текста
+        setTimeout(() => {
+            const textElements = document.querySelectorAll('.restaurant-address, .schedule-info p, .detail-item, .note-content li');
+            textElements.forEach(element => {
+                element.style.wordWrap = 'break-word';
+                element.style.overflowWrap = 'break-word';
+                element.style.hyphens = 'auto';
+                element.style.maxWidth = '100%';
+            });
+        }, 500);
+        
+        console.log(`🚀 Мобильная оптимизация активирована для экрана ${window.innerWidth}px`);
     }
 }
 
@@ -1506,6 +1609,50 @@ document.addEventListener('click', function(e) {
 
 
 
+// Функция мониторинга и исправления проблем с текстом
+function fixTextOverflowIssues() {
+    // Список селекторов элементов, которые могут вызывать проблемы
+    const problematicSelectors = [
+        '.restaurant-address',
+        '.schedule-info p',
+        '.detail-item',
+        '.note-content li',
+        '.feature-item',
+        '.schedule-info h3',
+        '.schedule-info h4',
+        '.main-title',
+        '.fancy-title',
+        '.nav-title'
+    ];
+    
+    problematicSelectors.forEach(selector => {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach(element => {
+            // Применяем фиксы для переполнения текста
+            element.style.wordWrap = 'break-word';
+            element.style.overflowWrap = 'break-word';
+            element.style.hyphens = 'auto';
+            element.style.maxWidth = '100%';
+            element.style.boxSizing = 'border-box';
+            
+            // Для очень длинных строк добавляем принудительный перенос
+            if (element.textContent && element.textContent.length > 50) {
+                element.style.wordBreak = 'break-word';
+            }
+        });
+    });
+    
+    // Исправляем контейнеры
+    const containers = document.querySelectorAll('.schedule-content, .hero-content, .section-content, .nav-container');
+    containers.forEach(container => {
+        container.style.maxWidth = '100%';
+        container.style.overflowX = 'hidden';
+        container.style.boxSizing = 'border-box';
+    });
+    
+    console.log('🔧 Исправление проблем с текстом выполнено');
+}
+
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Инициализация сайта...');
@@ -1520,6 +1667,12 @@ document.addEventListener('DOMContentLoaded', function() {
     if (document.getElementById('map')) {
         initMap();
     }
+    
+    // Исправляем проблемы с текстом сразу после загрузки
+    setTimeout(fixTextOverflowIssues, 500);
+    
+    // Периодически проверяем и исправляем проблемы с текстом (для динамического контента)
+    setInterval(fixTextOverflowIssues, 5000);
     
     console.log('✅ Сайт инициализирован');
 });
