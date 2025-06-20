@@ -3009,10 +3009,97 @@ section {
 
 .person-card {
     cursor: pointer;
+    position: relative;
 }
 
 .person-card:hover .gallery-hint {
     opacity: 1;
+}
+
+/* Улучшенные подсказки для мобильных */
+@media (max-width: 768px) {
+    .gallery-hint {
+        opacity: 1 !important;
+        position: static;
+        transform: none;
+        margin-top: 10px;
+        display: inline-block;
+        background: linear-gradient(135deg, #4ecdcc, #44a08d);
+        animation: pulseHint 2s infinite;
+        font-size: 0.9rem;
+        padding: 10px 16px;
+    }
+    
+    .person-card::before {
+        content: "👆";
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        font-size: 1.8rem;
+        background: #FF69B4;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: bounceIcon 1.5s infinite;
+        box-shadow: 0 4px 12px rgba(255, 105, 180, 0.4);
+        z-index: 10;
+        border: 3px solid white;
+    }
+    
+    .person-card:active {
+        transform: scale(0.95);
+        transition: transform 0.1s ease;
+    }
+    
+    /* Дополнительная подсказка над карточками */
+    .couple-info::before {
+        content: "📱 Нажмите на карточку чтобы увидеть больше фото";
+        display: block;
+        text-align: center;
+        background: linear-gradient(135deg, #FF69B4, #FFB6C1);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 25px;
+        margin-bottom: 20px;
+        font-weight: 600;
+        box-shadow: 0 6px 18px rgba(255, 105, 180, 0.3);
+        animation: slideDown 0.8s ease-out;
+        font-size: 0.95rem;
+    }
+}
+
+@keyframes pulseHint {
+    0%, 100% { 
+        box-shadow: 0 4px 12px rgba(78, 205, 204, 0.4);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 6px 16px rgba(78, 205, 204, 0.6);
+        transform: scale(1.02);
+    }
+}
+
+@keyframes bounceIcon {
+    0%, 100% { 
+        transform: translateY(0px) scale(1);
+    }
+    50% { 
+        transform: translateY(-8px) scale(1.1);
+    }
+}
+
+@keyframes slideDown {
+    0% { 
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% { 
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Модальное окно галереи */
@@ -4095,17 +4182,30 @@ section {
         overflow-wrap: break-word;
     }
     
-    /* Убираем проблемные декоративные элементы на мобильных */
-    .side-ornament,
-    .floating-heart,
-    .sparkle,
-    .gold-circle {
-        display: none !important;
+    /* Оставляем декоративные элементы, но уменьшаем их количество на мобильных */
+    .side-ornament.left-3,
+    .side-ornament.left-4,
+    .side-ornament.left-5,
+    .side-ornament.right-3,
+    .side-ornament.right-4,
+    .side-ornament.right-5,
+    .gold-7, .gold-8, .gold-9, .gold-10, .gold-11, .gold-12,
+    .heart-4, .heart-5,
+    .sparkle-4, .sparkle-5 {
+        display: none;
     }
     
-    /* Исправление абсолютного позиционирования */
-    .decorative-elements {
-        display: none !important;
+    /* Уменьшаем размер оставшихся элементов на мобильных */
+    .side-ornament,
+    .floating-heart,
+    .sparkle {
+        font-size: 1.5rem !important;
+        opacity: 0.4 !important;
+    }
+    
+    .gold-circle {
+        transform: scale(0.7) !important;
+        opacity: 0.5 !important;
     }
     
     /* Исправление навигации */
