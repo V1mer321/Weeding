@@ -7,7 +7,18 @@ const SHEET_NAME = 'Лист1'; // или название вашего лист
 
 function doPost(e) {
   try {
-    const data = JSON.parse(e.postData.contents);
+    let data;
+    
+    // Проверяем тип данных (JSON или FormData)
+    if (e.postData.type === 'application/json') {
+      data = JSON.parse(e.postData.contents);
+    } else {
+      // FormData
+      data = {
+        name: e.parameter.name,
+        text: e.parameter.text
+      };
+    }
     
     // Добавляем пожелание в таблицу
     const result = addWish(data);

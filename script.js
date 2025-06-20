@@ -914,15 +914,14 @@ async function saveWishToGoogleSheets(wishData) {
         throw new Error('Google Script URL не настроен');
     }
     
+    // Используем form data вместо JSON для обхода CORS
+    const formData = new FormData();
+    formData.append('name', wishData.name);
+    formData.append('text', wishData.text);
+    
     const response = await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            name: wishData.name,
-            text: wishData.text
-        })
+        body: formData
     });
     
     if (!response.ok) {
