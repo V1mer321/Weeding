@@ -914,14 +914,14 @@ async function saveWishToGoogleSheets(wishData) {
         throw new Error('Google Script URL не настроен');
     }
     
-    // Используем form data вместо JSON для обхода CORS
-    const formData = new FormData();
-    formData.append('name', wishData.name);
-    formData.append('text', wishData.text);
+    // Используем URL параметры для передачи данных
+    const url = new URL(GOOGLE_SCRIPT_URL);
+    url.searchParams.append('name', wishData.name);
+    url.searchParams.append('text', wishData.text);
+    url.searchParams.append('action', 'add');
     
-    const response = await fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        body: formData
+    const response = await fetch(url.toString(), {
+        method: 'GET'
     });
     
     if (!response.ok) {

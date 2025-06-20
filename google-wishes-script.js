@@ -59,17 +59,48 @@ function doPost(e) {
 
 function doGet(e) {
   try {
-    // Получаем все пожелания
-    const wishes = getAllWishes();
+    console.log('doGet вызван с параметрами:', e);
+    console.log('e.parameter:', e.parameter);
     
-    return ContentService
-      .createTextOutput(JSON.stringify({
-        success: true,
-        data: wishes
-      }))
-      .setMimeType(ContentService.MimeType.JSON);
+    // Проверяем, что это за действие
+    if (e.parameter && e.parameter.action === 'add') {
+      // Добавляем новое пожелание
+      const data = {
+        name: e.parameter.name || '',
+        text: e.parameter.text || ''
+      };
+      
+      console.log('Добавляем пожелание:', data);
+      
+      // Проверяем обязательные поля
+      if (!data.name || !data.text) {
+        throw new Error('Отсутствуют обязательные поля: name или text');
+      }
+      
+      const result = addWish(data);
+      console.log('Пожелание добавлено:', result);
+      
+      return ContentService
+        .createTextOutput(JSON.stringify({
+          success: true,
+          message: 'Пожелание добавлено',
+          data: result
+        }))
+        .setMimeType(ContentService.MimeType.JSON);
+    } else {
+      // Получаем все пожелания
+      const wishes = getAllWishes();
+      
+      return ContentService
+        .createTextOutput(JSON.stringify({
+          success: true,
+          data: wishes
+        }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
       
   } catch (error) {
+    console.error('Ошибка в doGet:', error);
     return ContentService
       .createTextOutput(JSON.stringify({
         success: false,
