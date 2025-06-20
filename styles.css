@@ -4104,6 +4104,17 @@ section {
     body {
         font-size: 14px;
         line-height: 1.4;
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
+    }
+    
+    /* Принудительно скрываем все анимации */
+    .side-ornament,
+    .gold-circle,
+    .floating-heart,
+    .sparkle,
+    .menu-ornament {
+        display: none !important;
     }
     
     .main-title {
@@ -4269,11 +4280,19 @@ section {
     .schedule-content,
     .nav-container,
     .hero-content,
-    .section-content {
+    .section-content,
+    .hero-section,
+    .countdown-section,
+    .wishes-section,
+    .avatars-section,
+    .survey-section,
+    .schedule-section {
         padding-left: 15px !important;
         padding-right: 15px !important;
         max-width: 100% !important;
-        box-sizing: border-box;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
     }
     
     /* Исправление текста */
@@ -4286,8 +4305,25 @@ section {
         overflow-wrap: break-word;
     }
     
-    /* Восстановлены все боковые анимации! ✨ */
-    /* Все декоративные элементы снова работают на всех устройствах */
+    /* Скрываем боковые анимации на мобильных для исправления верстки */
+    .side-ornament,
+    .gold-circle,
+    .floating-heart,
+    .sparkle {
+        display: none !important;
+    }
+    
+    /* Убираем возможность горизонтального скролла */
+    html, body {
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
+    }
+    
+    /* Исправляем секции чтобы не выходили за границы */
+    section {
+        overflow-x: hidden !important;
+        position: relative !important;
+    }
     
     /* Исправление навигации */
     .nav-menu {
@@ -4526,5 +4562,59 @@ section {
         will-change: scroll-position;
         -webkit-transform: translate3d(0,0,0);
         transform: translate3d(0,0,0);
+    }
+}
+
+/* КРИТИЧЕСКИЕ ИСПРАВЛЕНИЯ ДЛЯ МОБИЛЬНОЙ ВЕРСИИ */
+@media (max-width: 768px) {
+    /* Полное исправление горизонтального скролла */
+    * {
+        box-sizing: border-box !important;
+    }
+    
+    html {
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
+        width: 100% !important;
+    }
+    
+    body {
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    /* Исправление всех секций */
+    section, div, .hero-section, .schedule-section {
+        max-width: 100vw !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+    }
+    
+    /* Исправление контейнеров */
+    .container, .hero-content, .schedule-content, .section-content {
+        max-width: 100% !important;
+        width: 100% !important;
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        box-sizing: border-box !important;
+    }
+    
+    /* Исправление карточек */
+    .info-card, .person-card, .team-card, .wish-item {
+        max-width: calc(100vw - 20px) !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+    
+    /* Исправление заголовков */
+    .main-title, .fancy-title, .team-title {
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        hyphens: auto !important;
     }
 }
