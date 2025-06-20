@@ -2009,3 +2009,26 @@ function clearWishesDebug() {
 window.debugWishes = debugWishes;
 window.addTestWish = addTestWish;
 window.clearWishesDebug = clearWishesDebug;
+
+// Удалить конкретное пожелание
+function removeWishByContent(name, text) {
+    const initialLength = wishesData.length;
+    wishesData = wishesData.filter(wish => 
+        !(wish.name.toLowerCase().includes(name.toLowerCase()) && 
+          wish.text.toLowerCase().includes(text.toLowerCase()))
+    );
+    
+    localStorage.setItem('weddingWishes', JSON.stringify(wishesData));
+    
+    const removedCount = initialLength - wishesData.length;
+    console.log(`🗑️ Удалено пожеланий: ${removedCount}`);
+    
+    // Обновить отображение
+    displayWishes();
+    updateWishesStats();
+    
+    return removedCount;
+}
+
+// Добавляем функцию в глобальную область для доступа из консоли
+window.removeWishByContent = removeWishByContent;
