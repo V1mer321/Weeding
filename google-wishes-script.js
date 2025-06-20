@@ -115,47 +115,83 @@ function doOptions(e) {
 }
 
 function addWish(wishData) {
-  const sheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName(SHEET_NAME);
-  
-  // Генерируем ID
-  const id = Utilities.getUuid();
-  const timestamp = new Date().toISOString();
-  
-  // Добавляем строку в таблицу
-  sheet.appendRow([
-    id,
-    wishData.name,
-    wishData.text,
-    timestamp
-  ]);
-  
-  return {
-    id: id,
-    name: wishData.name,
-    text: wishData.text,
-    timestamp: timestamp
-  };
+  try {
+    console.log('Пытаемся открыть таблицу с ID:', SHEET_ID);
+    
+    // Проверяем доступ к таблице
+    const spreadsheet = SpreadsheetApp.openById(SHEET_ID);
+    console.log('Таблица открыта:', spreadsheet.getName());
+    
+    const sheet = spreadsheet.getSheetByName(SHEET_NAME);
+    if (!sheet) {
+      throw new Error(`Лист "${SHEET_NAME}" не найден`);
+    }
+    console.log('Лист найден:', sheet.getName());
+    
+    // Генерируем ID
+    const id = Utilities.getUuid();
+    const timestamp = new Date().toISOString();
+    
+    console.log('Добавляем данные:', [id, wishData.name, wishData.text, timestamp]);
+    
+    // Добавляем строку в таблицу
+    sheet.appendRow([
+      id,
+      wishData.name,
+      wishData.text,
+      timestamp
+    ]);
+    
+    console.log('Строка добавлена успешно');
+    
+    return {
+      id: id,
+      name: wishData.name,
+      text: wishData.text,
+      timestamp: timestamp
+    };
+  } catch (error) {
+    console.error('Ошибка в addWish:', error);
+    throw error;
+  }
 }
 
 function getAllWishes() {
-  const sheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName(SHEET_NAME);
-  const data = sheet.getDataRange().getValues();
-  
-  // Пропускаем заголовок (первую строку)
-  const wishes = [];
-  for (let i = 1; i < data.length; i++) {
-    wishes.push({
-      id: data[i][0],
-      name: data[i][1],
-      text: data[i][2],
-      timestamp: data[i][3]
-    });
+  try {
+    console.log('Получаем все пожелания из таблицы:', SHEET_ID);
+    
+    const spreadsheet = SpreadsheetApp.openById(SHEET_ID);
+    const sheet = spreadsheet.getSheetByName(SHEET_NAME);
+    
+    if (!sheet) {
+      throw new Error(`Лист "${SHEET_NAME}" не найден`);
+    }
+    
+    const data = sheet.getDataRange().getValues();
+    console.log('Получено строк из таблицы:', data.length);
+    
+    // Пропускаем заголовок (первую строку)
+    const wishes = [];
+    for (let i = 1; i < data.length; i++) {
+      if (data[i][0]) { // Проверяем, что строка не пустая
+        wishes.push({
+          id: data[i][0],
+          name: data[i][1],
+          text: data[i][2],
+          timestamp: data[i][3]
+        });
+      }
+    }
+    
+    // Сортируем по времени (новые сначала)
+    wishes.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    
+    console.log('Обработано пожеланий:', wishes.length);
+    return wishes;
+  } catch (error) {
+    console.error('Ошибка в getAllWishes:', error);
+    throw error;
   }
-  
-  // Сортируем по времени (новые сначала)
-  wishes.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-  
-  return wishes;
 }
 
 // Тестовая функция для проверки
