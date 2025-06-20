@@ -12,25 +12,36 @@ function doPost(e) {
     // Добавляем пожелание в таблицу
     const result = addWish(data);
     
-    return ContentService
+    const output = ContentService
       .createTextOutput(JSON.stringify({
         success: true,
         message: 'Пожелание добавлено',
         data: result
       }))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeader('Access-Control-Allow-Origin', '*')
-      .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-      .setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      .setMimeType(ContentService.MimeType.JSON);
+    
+    // Добавляем CORS заголовки
+    output.setHeaders({
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type'
+    });
+    
+    return output;
       
   } catch (error) {
-    return ContentService
+    const output = ContentService
       .createTextOutput(JSON.stringify({
         success: false,
         message: error.toString()
       }))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeader('Access-Control-Allow-Origin', '*');
+      .setMimeType(ContentService.MimeType.JSON);
+    
+    output.setHeaders({
+      'Access-Control-Allow-Origin': '*'
+    });
+    
+    return output;
   }
 }
 
@@ -39,33 +50,47 @@ function doGet(e) {
     // Получаем все пожелания
     const wishes = getAllWishes();
     
-    return ContentService
+    const output = ContentService
       .createTextOutput(JSON.stringify({
         success: true,
         data: wishes
       }))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeader('Access-Control-Allow-Origin', '*')
-      .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-      .setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      .setMimeType(ContentService.MimeType.JSON);
+    
+    output.setHeaders({
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type'
+    });
+    
+    return output;
       
   } catch (error) {
-    return ContentService
+    const output = ContentService
       .createTextOutput(JSON.stringify({
         success: false,
         message: error.toString()
       }))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeader('Access-Control-Allow-Origin', '*');
+      .setMimeType(ContentService.MimeType.JSON);
+    
+    output.setHeaders({
+      'Access-Control-Allow-Origin': '*'
+    });
+    
+    return output;
   }
 }
 
 function doOptions(e) {
-  return ContentService
-    .createTextOutput('')
-    .setHeader('Access-Control-Allow-Origin', '*')
-    .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-    .setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  const output = ContentService.createTextOutput('');
+  
+  output.setHeaders({
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type'
+  });
+  
+  return output;
 }
 
 function addWish(wishData) {
